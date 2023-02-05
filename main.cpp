@@ -10,18 +10,26 @@ public:
   int hp;
   int baseSpeed;
   int baseAttack;
+  int baseDefence;
+  int accuracy;
+  int stamina;
+  int defence;
   int speed;
   int attack;
   int player;
   bool guarding;
   bool preparingToDodge;
+  bool actionCompleted;
 
-  void new_character(std::string newName, int newHp, int newSpeed, int newAttack, bool initGuard = false, bool initDodge = false)
+  void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, bool initGuard = false, bool initDodge = false)
   {
     name = newName;
     hp = newHp;
     baseSpeed = newSpeed;
     baseAttack = newAttack;
+    baseDefence = newDefence;
+    accuracy = newAccuracy;
+    stamina = newStamina;
     guarding = initGuard;
     preparingToDodge = initDodge;
   }
@@ -71,8 +79,34 @@ void resetStats(std::vector<character> combatants)
   }
 }
 
-void calculateOutcome(std::vector<character> combatants)
+bool actionSucceeds(character player)
 {
+  int randNumber = 0 + rand() % 100;
+  if (player.guarding)
+  {
+    if (player.defence >= randNumber)
+    {
+      return true;
+    }
+    return false;
+  }
+  else if (player.preparingToDodge)
+  {
+    if (player.speed > randNumber)
+    {
+      return true;
+    }
+  }
+  if (player.accuracy > randNumber)
+  {
+    return true;
+  }
+  return false;
+}
+
+std::string calculateOutcome(std::vector<character> combatants)
+{
+  std::string outcomeMessage;
   std::vector<character> actionOrder;
   int damageInflicted;
   if (combatants[0].speed >= combatants[1].speed)
@@ -85,20 +119,52 @@ void calculateOutcome(std::vector<character> combatants)
     actionOrder.push_back(combatants[1]);
     actionOrder.push_back(combatants[0]);
   }
-  for (int n = 0; n < 2; n++) {
 
+  // First strike
+
+  int *hpPtr2 = &actionOrder[1].hp;
+  if (actionOrder[1].preparingToDodge == false && actionOrder[1].guarding == false)
+  {
+    if (actionSucceeds(actionOrder[0]))
+    {
+      *hpPtr2 = actionOrder[1].hp - actionOrder[0].attack;
+      outcomeMessage = actionOrder[0].name + " hit " + actionOrder[1].name + " for " + std::to_string(actionOrder[0].attack) + " HP.\n";
+    }
+    else
+    {
+      outcomeMessage = "Attack missed\n";
+    }
   }
+
+  // Retaliation
+  if (actionOrder[1].hp > 0)
+  {
+    int *hpPtr1 = &actionOrder[0].hp;
+    if (actionOrder[0].preparingToDodge == false && actionOrder[0].guarding == false)
+    {
+      if (actionSucceeds(actionOrder[1]))
+      {
+        *hpPtr1 = actionOrder[0].hp - actionOrder[1].attack;
+        outcomeMessage += actionOrder[1].name + " hit " + actionOrder[0].name + " for " + std::to_string(actionOrder[1].attack) + " HP.\n";
+      }
+      else
+      {
+        outcomeMessage = "Attack missed\n";
+      }
+    }
+  }
+  return outcomeMessage;
 }
 
 int main()
 {
-  speedy_mc_speed.new_character("SpeedyMcSpeed", 45, 85, 10);
-  big_boi.new_character("BigBoi", 90, 30, 20);
-  allrounder.new_character("Joe", 60, 60, 15);
+  speedy_mc_speed.new_character("SpeedyMcSpeed", 45, 85, 10, 60, 90, 50);
+  big_boi.new_character("BigBoi", 90, 30, 20, 85, 80, 50);
+  allrounder.new_character("Joe", 60, 60, 15, 75, 90, 50);
 
   bool victory = false;
   std::vector<character> combatants, characters;
-  std::string choicePlayer1, choicePlayer2;
+  std::string choicePlayer1, choicePlayer2, outcome;
   int action;
 
   characters = {speedy_mc_speed, big_boi, allrounder};
@@ -154,14 +220,19 @@ int main()
         break;
       }
     }
-    calculateOutcome(combatants);
-    victory = true;
+    outcome = calculateOutcome(combatants);
+    std::cout << "\n" << outcome << "\n";
+    std::cout << "Name: "<< combatants[0].name << " HP:" << combatants[0].hp << "\n";
+    std::cout << "Name: "<< combatants[1].name << " HP:" << combatants[1].hp << "\n";
+
+
+
+    for (int m = 0; m < 2; m++)
+    {
+      if (combatants[m].hp <= 0)
+      {
+        victory = true;
+      }
+    }
   }
-  // std::cout << combatants[0].name << "\n";
-  // std::cout << combatants[0].attack << "\n";
-  // std::cout << combatants[0].speed << "\n";
-  // std::cout << "=======================\n";
-  // std::cout << combatants[1].name << "\n";
-  // std::cout << combatants[1].attack << "\n";
-  // std::cout << combatants[1].speed << "\n";
 }
