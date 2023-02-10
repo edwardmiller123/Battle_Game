@@ -63,6 +63,13 @@ public:
     bool *guardPtr = &guarding;
     *guardPtr = true;
   }
+
+  void applyAction(character attacker) {
+    int *hpPtr = &hp;
+    if (!preparingToDodge) {
+      *hpPtr = hp - attacker.attack;
+    }
+  }
 };
 
 character speedy_mc_speed, big_boi, allrounder;
@@ -104,57 +111,6 @@ bool actionSucceeds(character player)
   return false;
 }
 
-std::string calculateOutcome(std::vector<character> combatants)
-{
-  std::string outcomeMessage;
-  std::vector<character> actionOrder;
-  int damageInflicted;
-  if (combatants[0].speed >= combatants[1].speed)
-  {
-    actionOrder.push_back(combatants[0]);
-    actionOrder.push_back(combatants[1]);
-  }
-  else
-  {
-    actionOrder.push_back(combatants[1]);
-    actionOrder.push_back(combatants[0]);
-  }
-
-  // First strike
-
-  int *hpPtr2 = &actionOrder[1].hp;
-  if (actionOrder[1].preparingToDodge == false && actionOrder[1].guarding == false)
-  {
-    if (actionSucceeds(actionOrder[0]))
-    {
-      *hpPtr2 = actionOrder[1].hp - actionOrder[0].attack;
-      outcomeMessage = actionOrder[0].name + " hit " + actionOrder[1].name + " for " + std::to_string(actionOrder[0].attack) + " HP.\n";
-    }
-    else
-    {
-      outcomeMessage = "Attack missed\n";
-    }
-  }
-
-  // Retaliation
-  if (actionOrder[1].hp > 0)
-  {
-    int *hpPtr1 = &actionOrder[0].hp;
-    if (actionOrder[0].preparingToDodge == false && actionOrder[0].guarding == false)
-    {
-      if (actionSucceeds(actionOrder[1]))
-      {
-        *hpPtr1 = actionOrder[0].hp - actionOrder[1].attack;
-        outcomeMessage += actionOrder[1].name + " hit " + actionOrder[0].name + " for " + std::to_string(actionOrder[1].attack) + " HP.\n";
-      }
-      else
-      {
-        outcomeMessage = "Attack missed\n";
-      }
-    }
-  }
-  return outcomeMessage;
-}
 
 int main()
 {
@@ -220,8 +176,20 @@ int main()
         break;
       }
     }
-    outcome = calculateOutcome(combatants);
-    std::cout << "\n" << outcome << "\n";
+
+    // Whoever has the highest speed attacks first
+    if (combatants[0].speed > combatants[1].speed) {
+       for (int m = 0, n = 1; m <= 1, n >= 0; m++, n-- ) {
+        combatants[n].applyAction(combatants[m]);
+    }   
+    } else {
+       for (int m = 0, n = 1; m <= 1, n >= 0; m++, n-- ) {
+        combatants[m].applyAction(combatants[n]);
+    }   
+    }
+    
+    
+    // std::cout << "\n" << outcome << "\n";
     std::cout << "Name: "<< combatants[0].name << " HP:" << combatants[0].hp << "\n";
     std::cout << "Name: "<< combatants[1].name << " HP:" << combatants[1].hp << "\n";
 
