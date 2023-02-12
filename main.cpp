@@ -225,7 +225,7 @@ int main()
         enoughStamina = combatants[i].light_attack();
         if (enoughStamina)
         {
-          std::cout << "Light Attack\n";
+          std::cout << "Light Attack\n\n";
           break;
         }
         else
@@ -238,7 +238,7 @@ int main()
         enoughStamina = combatants[i].heavy_attack();
         if (enoughStamina)
         {
-          std::cout << "Heavy Attack\n";
+          std::cout << "Heavy Attack\n\n";
           break;
         }
         else
@@ -251,7 +251,7 @@ int main()
         enoughStamina = combatants[i].dodge();
         if (enoughStamina)
         {
-          std::cout << "Dodge\n";
+          std::cout << "Dodge\n\n";
           break;
         }
         else
@@ -263,11 +263,11 @@ int main()
 
       case 4:
         combatants[i].guard();
-        std::cout << "Guard\n";
+        std::cout << "Guard\n\n";
         break;
       default:
         combatants[i].resetTempStats();
-        std::cout << "Do nothing\n";
+        std::cout << "Do nothing\n\n";
         break;
       }
     }
@@ -299,9 +299,10 @@ int main()
       combatants[n].resetTempStats();
       combatants[n].increaseStamina();
     }
-
-    std::cout << "Name: " << combatants[0].name << " HP: " << combatants[0].hp << " Stamina: " << combatants[0].stamina << "\n";
-    std::cout << "Name: " << combatants[1].name << " HP: " << combatants[1].hp << " Stamina: " << combatants[1].stamina << "\n";
+    std::cout << "========================================\n";
+    std::cout << "Name: " << combatants[0].name << " // HP: " << combatants[0].hp << " // Stamina: " << combatants[0].stamina << "\n";
+    std::cout << "Name: " << combatants[1].name << " // HP: " << combatants[1].hp << " // Stamina: " << combatants[1].stamina << "\n";
+    std::cout << "========================================\n";
 
     for (int m = 0; m < 2; m++)
     {
