@@ -228,7 +228,6 @@ int main()
       }
     }
     // Reset the action dependant stats after every turn.
-    // stats dont seem to be resetting
     for (int n = 0; n < 2; n++)
     {
       combatants[n].resetTempStats();
