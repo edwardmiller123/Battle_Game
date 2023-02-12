@@ -38,28 +38,58 @@ public:
     preparingToDodge = initDodge;
   }
 
-  void light_attack()
+  bool light_attack()
   {
     int *attackPtr = &attack;
     int *speedPtr = &speed;
-    *attackPtr = baseAttack - 5;
-    *speedPtr = baseSpeed + 15;
+    int *staminaPtr = &stamina;
+    if (stamina > 3)
+    {
+      *attackPtr = baseAttack - 5;
+      *speedPtr = baseSpeed + 15;
+      *staminaPtr -= 3;
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 
-  void heavy_attack()
+  bool heavy_attack()
   {
     int *attackPtr = &attack;
     int *speedPtr = &speed;
-    *attackPtr = baseAttack + 10;
-    *speedPtr = baseSpeed - 20;
+    int *staminaPtr = &stamina;
+    if (stamina > 5)
+    {
+      *attackPtr = baseAttack + 10;
+      *speedPtr = baseSpeed - 20;
+      *staminaPtr -= 5;
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 
-  void dodge()
+  bool dodge()
   {
     bool *dodgePtr = &preparingToDodge;
     int *speedPtr = &speed;
-    *dodgePtr = true;
-    *speedPtr = baseSpeed + 35;
+    int *staminaPtr = &stamina;
+    if (stamina > 2)
+    {
+      *dodgePtr = true;
+      *speedPtr = baseSpeed + 35;
+      *staminaPtr -= 2;
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 
   void guard()
@@ -132,17 +162,24 @@ public:
     *dodgePtr = false;
     *guardPtr = false;
   }
+
+  void increaseStamina()
+  {
+    int *staminaPtr = &stamina;
+    stamina += 1;
+  }
 };
 
 character speedy_mc_speed, big_boi, joe, veryBadCharacter;
 
 int main()
 {
-  speedy_mc_speed.new_character("SpeedyMcSpeed", 45, 85, 10, 50, 90, 50);
-  big_boi.new_character("BigBoi", 90, 30, 20, 85, 80, 50);
-  joe.new_character("Joe", 60, 60, 15, 75, 90, 50);
-  veryBadCharacter.new_character("BadStats", 50, 1, 1, 1, 1, 50);
+  speedy_mc_speed.new_character("SpeedyMcSpeed", 60, 85, 10, 50, 90, 30);
+  big_boi.new_character("BigBoi", 90, 30, 20, 85, 80, 20);
+  joe.new_character("Joe", 70, 60, 15, 75, 90, 25);
+  veryBadCharacter.new_character("BadStats", 50, 1, 1, 1, 1, 1);
 
+  bool enoughStamina;
   bool victory = false;
   std::vector<character> combatants, characters;
   std::string choicePlayer1, choicePlayer2, outcome;
@@ -185,17 +222,45 @@ int main()
       switch (action)
       {
       case 1:
-        combatants[i].light_attack();
-        std::cout << "Light Attack\n";
-        break;
+        enoughStamina = combatants[i].light_attack();
+        if (enoughStamina)
+        {
+          std::cout << "Light Attack\n";
+          break;
+        }
+        else
+        {
+          std::cout << "Not enough stamina\n";
+          std::cout << "Player " << i + 1 << ": Choose another action...\n";
+          std::cin >> action;
+        }
       case 2:
-        combatants[i].heavy_attack();
-        std::cout << "Heavy Attack\n";
-        break;
+        enoughStamina = combatants[i].heavy_attack();
+        if (enoughStamina)
+        {
+          std::cout << "Heavy Attack\n";
+          break;
+        }
+        else
+        {
+          std::cout << "Not enough stamina\n";
+          std::cout << "Player " << i + 1 << ": Choose another action...\n";
+          std::cin >> action;
+        }
       case 3:
-        combatants[i].dodge();
-        std::cout << "Dodge\n";
-        break;
+        enoughStamina = combatants[i].dodge();
+        if (enoughStamina)
+        {
+          std::cout << "Dodge\n";
+          break;
+        }
+        else
+        {
+          std::cout << "Not enough stamina\n";
+          std::cout << "Player " << i + 1 << ": Choose another action...\n";
+          std::cin >> action;
+        }
+
       case 4:
         combatants[i].guard();
         std::cout << "Guard\n";
@@ -227,14 +292,16 @@ int main()
         Sleep(2);
       }
     }
-    // Reset the action dependant stats after every turn.
+    // Reset the action dependant stats after every turn
+    // and regain stamina.
     for (int n = 0; n < 2; n++)
     {
       combatants[n].resetTempStats();
+      combatants[n].increaseStamina();
     }
 
-    std::cout << "Name: " << combatants[0].name << " HP: " << combatants[0].hp << " Attack: " << combatants[0].attack << "\n";
-    std::cout << "Name: " << combatants[1].name << " HP: " << combatants[1].hp << " Attack: " << combatants[1].attack << "\n";
+    std::cout << "Name: " << combatants[0].name << " HP: " << combatants[0].hp << " Stamina: " << combatants[0].stamina << "\n";
+    std::cout << "Name: " << combatants[1].name << " HP: " << combatants[1].hp << " Stamina: " << combatants[1].stamina << "\n";
 
     for (int m = 0; m < 2; m++)
     {
