@@ -124,6 +124,15 @@ int main()
         Sleep(2);
       }
     }
+
+    // Counter attacks are applied if there are any.
+    for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--) {
+      if (combatants[m].prepCounterAttack) {
+        outcome = combatants[n].receiveCounterAttack(combatants[m]);
+        std::cout << outcome + "\n";
+      }
+    }
+    
     // Reset the action dependant stats after every turn
     // and regain stamina.
     for (int n = 0; n < 2; n++)
