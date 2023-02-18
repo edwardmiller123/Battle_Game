@@ -49,80 +49,85 @@ int main()
     }
   }
 
-  if (player2Bot) {
-     combatants[1].isBot = true;
+  if (player2Bot)
+  {
+    combatants[1].isBot = true;
   }
 
   std::cout << "\nBegin!\n";
 
   while (victory != true)
   {
-
     for (int i = 0; i < 2; i++)
     {
-      if (combatants[i].isBot)
+      while (!combatants[i].actionChosen)
       {
-        action = bot(2);
-      }
-      else
-      {
-        std::cout << "Player " << i + 1 << ": Choose action...\n";
-        std::cin >> action;
-      }
-
-      switch (action)
-      {
-      case 1:
-        enoughStamina = combatants[i].light_attack();
-        if (enoughStamina)
+        if (combatants[i].isBot)
         {
-          std::cout << "Light Attack\n\n";
-          break;
+          std::cout << combatants[i].name << " (CPU) chooses...\n";
+          action = bot(2);
         }
         else
         {
-          std::cout << "Not enough stamina\n";
-          std::cout << "Player " << i + 1 << ": Choose another action...\n";
-          std::cin >> action;
-        }
-      case 2:
-        enoughStamina = combatants[i].heavy_attack();
-        if (enoughStamina)
-        {
-          std::cout << "Heavy Attack\n\n";
-          break;
-        }
-        else
-        {
-          std::cout << "Not enough stamina\n";
-          std::cout << "Player " << i + 1 << ": Choose another action...\n";
-          std::cin >> action;
-        }
-      case 3:
-        enoughStamina = combatants[i].dodge();
-        if (enoughStamina)
-        {
-          std::cout << "Dodge\n\n";
-          break;
-        }
-        else
-        {
-          std::cout << "Not enough stamina\n";
-          std::cout << "Player " << i + 1 << ": Choose another action...\n";
+          std::cout << "Player " << i + 1 << ": Choose action...\n";
           std::cin >> action;
         }
 
-      case 4:
-        combatants[i].guard();
-        std::cout << "Guard\n\n";
-        break;
-      default:
-        combatants[i].resetTempStats();
-        std::cout << "Do nothing\n\n";
-        break;
+        switch (action)
+        {
+        case 1:
+          enoughStamina = combatants[i].light_attack();
+          if (enoughStamina)
+          {
+            std::cout << "Light Attack\n\n";
+            combatants[i].actionChosen = true;
+            break;
+          }
+          else
+          {
+            std::cout << "Not enough stamina\n";
+            break;
+          }
+        case 2:
+          enoughStamina = combatants[i].heavy_attack();
+          if (enoughStamina)
+          {
+            std::cout << "Heavy Attack\n\n";
+            combatants[i].actionChosen = true;
+            break;
+          }
+          else
+          {
+            std::cout << "Not enough stamina\n";
+            break;
+          }
+        case 3:
+          enoughStamina = combatants[i].dodge();
+          if (enoughStamina)
+          {
+            std::cout << "Dodge\n\n";
+            combatants[i].actionChosen = true;
+            break;
+          }
+          else
+          {
+            std::cout << "Not enough stamina\n";
+            break;
+          }
+
+        case 4:
+          combatants[i].guard();
+          std::cout << "Guard\n\n";
+          combatants[i].actionChosen = true;
+          break;
+        default:
+          combatants[i].resetTempStats();
+          std::cout << "Do nothing\n\n";
+          combatants[i].actionChosen = true;
+          break;
+        }
       }
     }
-
     // Actions are applied. Whoever has the highest
     // speed goes first.
     if (combatants[0].speed > combatants[1].speed)
@@ -161,6 +166,7 @@ int main()
       combatants[n].resetTempStats();
       combatants[n].increaseStamina();
     }
+
     std::cout << "========================================\n";
     std::cout << "Name: " << combatants[0].name << " // HP: " << combatants[0].hp << " // Stamina: " << combatants[0].stamina << "\n";
     std::cout << "Name: " << combatants[1].name << " // HP: " << combatants[1].hp << " // Stamina: " << combatants[1].stamina << "\n";

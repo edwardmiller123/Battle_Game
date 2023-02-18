@@ -8,9 +8,9 @@ class character
 public:
   std::string name;
   int hp, baseSpeed, baseAttack, accuracy, stamina, defence, speed, attack, player;
-  bool guarding, preparingToDodge, prepCounterAttack, isBot;
+  bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen;
 
-  void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false)
+  void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false)
   {
     name = newName;
     hp = newHp;
@@ -23,6 +23,8 @@ public:
     preparingToDodge = initDodge;
     prepCounterAttack = initCounterAttack;
     isBot = initBot;
+    actionChosen = initActionChosen;
+
   }
 
   bool light_attack()
@@ -162,11 +164,13 @@ public:
     bool *dodgePtr = &preparingToDodge;
     bool *guardPtr = &guarding;
     bool *counterPtr = &prepCounterAttack;
+    bool *actionChosenPtr = &actionChosen;
     *attackPtr = 0;
     *speedPtr = 0;
     *dodgePtr = false;
     *guardPtr = false;
     *counterPtr = false;
+    *actionChosenPtr = false;
   }
 
   void increaseStamina()
