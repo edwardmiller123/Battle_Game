@@ -13,7 +13,9 @@ int main()
 
   bool enoughStamina;
   bool victory = false;
+  bool player2Bot = false;
   std::vector<character> combatants, characters;
+  std::vector<std::string> players;
   std::string choicePlayer1, choicePlayer2, outcome;
   int action;
 
@@ -28,7 +30,13 @@ int main()
 
   std::cin >> choicePlayer2;
 
-  std::vector<std::string> players = {choicePlayer1, choicePlayer2};
+  if (choicePlayer2 == "bot")
+  {
+    player2Bot = true;
+    choicePlayer2 = characters[bot(1)].name;
+  }
+
+  players = {choicePlayer1, choicePlayer2};
 
   for (int j = 0; j < players.size(); j++)
   {
@@ -41,6 +49,10 @@ int main()
     }
   }
 
+  if (player2Bot) {
+     combatants[1].isBot = true;
+  }
+
   std::cout << "\nBegin!\n";
 
   while (victory != true)
@@ -48,8 +60,15 @@ int main()
 
     for (int i = 0; i < 2; i++)
     {
-      std::cout << "Player " << i + 1 << ": Choose action...\n";
-      std::cin >> action;
+      if (combatants[i].isBot)
+      {
+        action = bot(2);
+      }
+      else
+      {
+        std::cout << "Player " << i + 1 << ": Choose action...\n";
+        std::cin >> action;
+      }
 
       switch (action)
       {
@@ -126,13 +145,15 @@ int main()
     }
 
     // Counter attacks are applied if there are any.
-    for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--) {
-      if (combatants[m].prepCounterAttack) {
+    for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
+    {
+      if (combatants[m].prepCounterAttack)
+      {
         outcome = combatants[n].receiveCounterAttack(combatants[m]);
         std::cout << outcome + "\n";
       }
     }
-    
+
     // Reset the action dependant stats after every turn
     // and regain stamina.
     for (int n = 0; n < 2; n++)

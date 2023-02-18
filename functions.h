@@ -1,3 +1,4 @@
+#include <iostream>
 #include <random>
 #include <windows.h>
 
@@ -12,4 +13,22 @@ bool actionSucceeds(int number)
   case false:
     return false;
   }
+}
+
+// "Bot" actually just randomly selects numbers.
+int bot(int section) {
+  int i;
+  srand(time(0));
+  switch (section) {
+    case 1:
+    // Choose character
+      i = 3;
+      break;
+    case 2:
+    // Choose action
+      i = 4;
+      break;
+  }
+  Sleep(3);
+return 0 + rand() % i;
 }
