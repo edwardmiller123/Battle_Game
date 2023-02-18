@@ -138,7 +138,7 @@ public:
     }
     if (!preparingToDodge && !guarding)
     {
-      if (attacker.attack != 0)
+      if (attacker.attack)
       {
         if (actionSucceeds(attacker.accuracy))
         {

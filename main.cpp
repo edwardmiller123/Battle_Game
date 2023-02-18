@@ -1,16 +1,9 @@
 #include <iostream>
 
-#include "character.h"
-
-character speedy_mc_speed, big_boi, joe, veryBadCharacter;
+#include "characters.h"
 
 int main()
 {
-  speedy_mc_speed.new_character("SpeedyMcSpeed", 60, 85, 10, 50, 90, 30);
-  big_boi.new_character("BigBoi", 90, 30, 20, 85, 80, 20);
-  joe.new_character("Joe", 70, 60, 15, 75, 90, 25);
-  veryBadCharacter.new_character("BadStats", 50, 1, 1, 1, 1, 1);
-
   bool enoughStamina;
   bool victory = false;
   bool player2Bot = false;
@@ -19,7 +12,7 @@ int main()
   std::string choicePlayer1, choicePlayer2, outcome;
   int action;
 
-  characters = {speedy_mc_speed, big_boi, joe, veryBadCharacter};
+  characters = initCharacters();
   combatants = {};
 
   std::cout << "Player1, Choose your character:\n";
@@ -34,6 +27,7 @@ int main()
   {
     player2Bot = true;
     choicePlayer2 = characters[bot(1)].name;
+    std::cout << "bot chooses " << choicePlayer2 << "\n";
   }
 
   players = {choicePlayer1, choicePlayer2};
