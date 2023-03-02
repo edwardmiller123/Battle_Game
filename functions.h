@@ -1,6 +1,7 @@
 #include <iostream>
 #include <random>
 #include <windows.h>
+#include <time.h>
 
 bool actionSucceeds(int number)
 {
