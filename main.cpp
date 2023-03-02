@@ -1,5 +1,7 @@
 #include <iostream>
+#include <windows.h>
 
+#include "functions.h"
 #include "characters.h"
 
 int main()
