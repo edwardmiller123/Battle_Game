@@ -1,16 +1,19 @@
 #include <string>
 #include <sstream>
+#include <SFML/Graphics.hpp>
 
 #include "functions.h"
 
 class character
 {
 public:
-  std::string name;
+  std::string name, texturePath;
   int hp, baseSpeed, baseAttack, accuracy, stamina, defence, speed, attack, player;
   bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen;
+  sf::Sprite sprite;
+  sf::Texture texture;
 
-  void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false)
+  void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, std::string newTexturePath, bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false)
   {
     name = newName;
     hp = newHp;
@@ -19,6 +22,7 @@ public:
     defence = newDefence;
     accuracy = newAccuracy;
     stamina = newStamina;
+    texturePath = newTexturePath;
     guarding = initGuard;
     preparingToDodge = initDodge;
     prepCounterAttack = initCounterAttack;
@@ -96,8 +100,10 @@ public:
     {
       *hpPtr = hp - damage;
       outcome = attacker.name + " successfully counter attacked." + "\n";
-    } else {
-      outcome = attacker.name + " attempted to counter attack but failed.\n"; 
+    }
+    else
+    {
+      outcome = attacker.name + " attempted to counter attack but failed.\n";
     }
     return outcome;
   }
