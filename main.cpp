@@ -16,8 +16,10 @@ int main()
   bool menu = true;
   std::vector<character> combatants, characters;
   std::vector<std::string> players;
-  std::string choicePlayer1, choicePlayer2, outcome;
+  std::string choicePlayer1, choicePlayer2, outcome, choice, playerStr;
+  std::stringstream stream;
   int action;
+  int player = 1;
 
   sf::RenderWindow window(sf::VideoMode(1600, 800), "Battle Game");
 
@@ -36,24 +38,30 @@ int main()
 
   if (!botIcon.loadFromFile("assets/bot.png"))
   {
-    std::cout << " bot texture didnt load";
+    std::cout << "Error loading bot icon";
     return 0;
   };
 
   botSprite.setTexture(botIcon);
-  botSprite.setPosition(sf::Vector2f(1450.f, 200.f));
+  botSprite.setPosition(sf::Vector2f(1450.f, 400.f));
   botSprite.scale(sf::Vector2f(0.5, 0.5));
 
   sf::Font font;
+  sf::Text text;
   if (!font.loadFromFile("assets/8bitOperatorPlus8-Regular.ttf"))
   {
     std::cout << "Error loading font\n";
     return 0;
   }
+  text.setFont(font);
+  text.setCharacterSize(40);
+  text.setFillColor(sf::Color::Black);
+  text.setPosition(sf::Vector2f(0.f, 0.f));
 
-  // Start Game.
+  // Start Game loop.
   while (window.isOpen())
   {
+    // Start Character selection menu.
     while (menu)
     {
       // Draw character icons on the menu.
@@ -69,32 +77,55 @@ int main()
         };
         characters[i].sprite.setTexture(characters[i].texture);
         characters[i].sprite.scale(sf::Vector2f(0.125, 0.125));
-        characters[i].sprite.setPosition(sf::Vector2f(i * 200 + 10.f, 200.f));
+        characters[i].sprite.setPosition(sf::Vector2f(i * 200 + 10.f, 400.f));
         window.draw(characters[i].sprite);
       }
       window.draw(botSprite);
 
       combatants = {};
 
-      std::cout << "Player1, Choose your character:\n";
-
-      std::cin >> choicePlayer1;
-
-      std::cout << "Player2, Choose your character:\n";
-
-      std::cin >> choicePlayer2;
-
+      stream << player;
+      stream >> playerStr;
+      std::string displayString = "Player " + playerStr + " Choose your character:\n";
+      text.setString(displayString);
+      window.draw(text);
+      
       while (window.pollEvent(event))
       {
 
-        if (event.type == sf::Event::Closed)
+        switch (event.type)
         {
-          window.close();
+        case sf::Event::Closed:
           menu = false;
+          window.close();
+          break;
+        case sf::Event::MouseButtonPressed:
+          if (event.mouseButton.button == sf::Mouse::Left)
+          {
+            sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            for (int j = 0; j < characters.size(); j++)
+            {
+
+              if (characters[j].sprite.getGlobalBounds().contains(mousePosition))
+              {
+                players.push_back(characters[j].name);
+                player++;
+              }
+            }
+          }
+          break;
+
+        default:
+          break;
         }
       }
-
+    
       window.display();
+
+      if (player == 3)
+      {
+        menu = false;
+      }
     }
 
     // Menu closes. Character choices are prepared for the game.
