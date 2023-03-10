@@ -165,10 +165,10 @@ int main()
     stats2.setFont(font);
     stats2.setCharacterSize(30);
     stats2.setFillColor(sf::Color::Black);
-    stats2.setPosition(sf::Vector2f(1450.f, 0.f));
+    stats2.setPosition(sf::Vector2f(1400.f, 0.f));
 
-    sf::Sprite lightAttackCard;
-    sf::Texture lightAttackCardTexture;
+    sf::Sprite lightAttackCard, heavyAttackCard, dodgeCard, guardCard;
+    sf::Texture lightAttackCardTexture, heavyAttackCardTexture, dodgeCardTexture, guardCardTexture;
 
     if (!lightAttackCardTexture.loadFromFile("assets/light_attack_card.png"))
     {
@@ -176,18 +176,48 @@ int main()
       return 0;
     };
 
+    if (!heavyAttackCardTexture.loadFromFile("assets/heavy_attack_card.png"))
+    {
+      std::cout << "Error loading heavy attack card";
+      return 0;
+    };
+
+    if (!dodgeCardTexture.loadFromFile("assets/dodge_card.png"))
+    {
+      std::cout << "Error loading dodge card";
+      return 0;
+    };
+
+    if (!guardCardTexture.loadFromFile("assets/guard_card.png"))
+    {
+      std::cout << "Error loading guard attack card";
+      return 0;
+    };
+
     lightAttackCard.setTexture(lightAttackCardTexture);
-    lightAttackCard.setPosition(sf::Vector2f(200.f, 400.f));
-    lightAttackCard.scale(sf::Vector2f(0.25, 0.25));
+    lightAttackCard.setPosition(sf::Vector2f(200.f, 500.f));
+    lightAttackCard.scale(sf::Vector2f(0.125, 0.125));
+
+    heavyAttackCard.setTexture(heavyAttackCardTexture);
+    heavyAttackCard.setPosition(sf::Vector2f(500.f, 500.f));
+    heavyAttackCard.scale(sf::Vector2f(0.125, 0.125));
+
+    dodgeCard.setTexture(dodgeCardTexture);
+    dodgeCard.setPosition(sf::Vector2f(800.f, 500.f));
+    dodgeCard.scale(sf::Vector2f(0.125, 0.125));
+
+    guardCard.setTexture(guardCardTexture);
+    guardCard.setPosition(sf::Vector2f(1200.f, 500.f));
+    guardCard.scale(sf::Vector2f(0.125, 0.125));
 
     std::cout << "\nBegin!\n";
     // Apply action Loop
     while (!victory)
     {
       window.clear();
-      stats1String = "HP: " + std::to_string(combatants[0].hp) + " \n" + "STM: " + std::to_string(combatants[0].stamina) + " \n";
+      stats1String = "Name: " + combatants[0].name + " \n" + "HP: " + std::to_string(combatants[0].hp) + " \n" + "STM: " + std::to_string(combatants[0].stamina) + " \n";
       stats1.setString(stats1String);
-      stats2String = "HP: " + std::to_string(combatants[1].hp) + " \n" + "STM: " + std::to_string(combatants[1].stamina) + " \n";
+      stats2String = "Name: " + combatants[1].name + " \n" + "HP: " + std::to_string(combatants[1].hp) + " \n" + "STM: " + std::to_string(combatants[1].stamina) + " \n";
       stats2.setString(stats2String);
       window.draw(background);
       window.draw(stats1);
@@ -204,6 +234,9 @@ int main()
           window.draw(stats1);
           window.draw(stats2);
           window.draw(lightAttackCard);
+          window.draw(heavyAttackCard);
+          window.draw(dodgeCard);
+          window.draw(guardCard);
           window.display();
 
           if (combatants[i].isBot)
@@ -282,6 +315,8 @@ int main()
             case sf::Event::Closed:
               victory = false;
               menu = false;
+              combatants[0].actionChosen = true;
+              combatants[1].actionChosen = true;
               window.close();
               break;
             case sf::Event::MouseButtonPressed:
@@ -292,6 +327,18 @@ int main()
                 if (lightAttackCard.getGlobalBounds().contains(mousePosition))
                 {
                   action = 1;
+                }
+                else if (heavyAttackCard.getGlobalBounds().contains(mousePosition))
+                {
+                  action = 2;
+                }
+                else if (dodgeCard.getGlobalBounds().contains(mousePosition))
+                {
+                  action = 3;
+                }
+                else if (guardCard.getGlobalBounds().contains(mousePosition))
+                {
+                  action = 4;
                 }
               }
               break;
