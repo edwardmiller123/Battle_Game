@@ -47,16 +47,16 @@ int main()
   botSprite.scale(sf::Vector2f(0.5, 0.5));
 
   sf::Font font;
-  sf::Text text;
+  sf::Text text, stats1, stats2;
   if (!font.loadFromFile("assets/8bitOperatorPlus8-Regular.ttf"))
   {
     std::cout << "Error loading font\n";
     return 0;
   }
   text.setFont(font);
-  text.setCharacterSize(40);
+  text.setCharacterSize(50);
   text.setFillColor(sf::Color::Black);
-  text.setPosition(sf::Vector2f(0.f, 0.f));
+  text.setPosition(sf::Vector2f(300.f, 200.f));
 
   // Start Game loop.
   while (window.isOpen())
@@ -111,6 +111,10 @@ int main()
                 player++;
               }
             }
+            if (botSprite.getGlobalBounds().contains(mousePosition) && player == 2)
+            {
+              choicePlayer2 = "bot";
+            }
           }
           break;
 
@@ -136,8 +140,6 @@ int main()
       std::cout << "bot chooses " << choicePlayer2 << "\n";
     }
 
-    players = {choicePlayer1, choicePlayer2};
-
     for (int j = 0; j < players.size(); j++)
     {
       for (int i = 0; i < characters.size(); i++)
@@ -154,132 +156,181 @@ int main()
       combatants[1].isBot = true;
     }
 
-    // std::cout << "\nBegin!\n";
+    std::string stats1String, stats2String;
 
-    // while (victory != true)
-    // {
-    //   for (int i = 0; i < 2; i++)
-    //   {
-    //     while (!combatants[i].actionChosen)
-    //     {
-    //       if (combatants[i].isBot)
-    //       {
-    //         std::cout << combatants[i].name << " (CPU) chooses...\n";
-    //         action = bot(2);
-    //       }
-    //       else
-    //       {
-    //         std::cout << "Player " << i + 1 << ": Choose action...\n";
-    //         std::cin >> action;
-    //       }
+    stats1.setFont(font);
+    stats1.setCharacterSize(30);
+    stats1.setFillColor(sf::Color::Black);
+    stats1.setPosition(sf::Vector2f(0.f, 0.f));
 
-    //       switch (action)
-    //       {
-    //       case 1:
-    //         enoughStamina = combatants[i].light_attack();
-    //         if (enoughStamina)
-    //         {
-    //           std::cout << "Light Attack\n\n";
-    //           combatants[i].actionChosen = true;
-    //           break;
-    //         }
-    //         else
-    //         {
-    //           std::cout << "Not enough stamina\n";
-    //           break;
-    //         }
-    //       case 2:
-    //         enoughStamina = combatants[i].heavy_attack();
-    //         if (enoughStamina)
-    //         {
-    //           std::cout << "Heavy Attack\n\n";
-    //           combatants[i].actionChosen = true;
-    //           break;
-    //         }
-    //         else
-    //         {
-    //           std::cout << "Not enough stamina\n";
-    //           break;
-    //         }
-    //       case 3:
-    //         enoughStamina = combatants[i].dodge();
-    //         if (enoughStamina)
-    //         {
-    //           std::cout << "Dodge\n\n";
-    //           combatants[i].actionChosen = true;
-    //           break;
-    //         }
-    //         else
-    //         {
-    //           std::cout << "Not enough stamina\n";
-    //           break;
-    //         }
+    stats2.setFont(font);
+    stats2.setCharacterSize(30);
+    stats2.setFillColor(sf::Color::Black);
+    stats2.setPosition(sf::Vector2f(1450.f, 0.f));
 
-    //       case 4:
-    //         combatants[i].guard();
-    //         std::cout << "Guard\n\n";
-    //         combatants[i].actionChosen = true;
-    //         break;
-    //       default:
-    //         combatants[i].resetTempStats();
-    //         std::cout << "Do nothing\n\n";
-    //         combatants[i].actionChosen = true;
-    //         break;
-    //       }
-    //     }
-    //   }
-    //   // Actions are applied. Whoever has the highest
-    //   // speed goes first.
-    //   if (combatants[0].speed > combatants[1].speed)
-    //   {
-    //     for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
-    //     {
-    //       outcome = combatants[n].applyAction(combatants[m]);
-    //       std::cout << outcome + "\n";
-    //       Sleep(2);
-    //     }
-    //   }
-    //   else
-    //   {
-    //     for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
-    //     {
-    //       outcome = combatants[m].applyAction(combatants[n]);
-    //       std::cout << outcome + "\n";
-    //       Sleep(2);
-    //     }
-    //   }
+    std::cout << "\nBegin!\n";
+    // Apply action Loop
+    while (victory != true)
+    {
+      window.clear();
+      stats1String = "HP: " + std::to_string(combatants[0].hp) + " \n" + "STM: " + std::to_string(combatants[0].stamina) + " \n";
+      stats1.setString(stats1String);
+      stats2String = "HP: " + std::to_string(combatants[1].hp) + " \n" + "STM: " + std::to_string(combatants[1].stamina) + " \n";
+      stats2.setString(stats2String);
+      window.draw(background);
+      window.draw(stats1);
+      window.draw(stats2);
+      window.display();
 
-    //   // Counter attacks are applied if there are any.
-    //   for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
-    //   {
-    //     if (combatants[m].prepCounterAttack)
-    //     {
-    //       outcome = combatants[n].receiveCounterAttack(combatants[m]);
-    //       std::cout << outcome + "\n";
-    //     }
-    //   }
+      for (int i = 0; i < 2; i++)
+      {
+        // Choose action loop
+        while (!combatants[i].actionChosen)
+        {
+          window.clear();
+          window.draw(background);
 
-    //   // Reset the action dependant stats after every turn
-    //   // and regain stamina.
-    //   for (int n = 0; n < 2; n++)
-    //   {
-    //     combatants[n].resetTempStats();
-    //     combatants[n].increaseStamina();
-    //   }
+          if (combatants[i].isBot)
+          {
+            std::cout << combatants[i].name << " (CPU) chooses...\n";
+            action = bot(2);
+          }
+          else
+          {
+            std::cout << "Player " << i + 1 << ": Choose action...\n";
+            std::cin >> action;
+          }
 
-    //   std::cout << "========================================\n";
-    //   std::cout << "Name: " << combatants[0].name << " // HP: " << combatants[0].hp << " // Stamina: " << combatants[0].stamina << "\n";
-    //   std::cout << "Name: " << combatants[1].name << " // HP: " << combatants[1].hp << " // Stamina: " << combatants[1].stamina << "\n";
-    //   std::cout << "========================================\n";
+          switch (action)
+          {
+          case 1:
+            enoughStamina = combatants[i].light_attack();
+            if (enoughStamina)
+            {
+              window.close();
+              std::cout << "Light Attack\n\n";
+              combatants[i].actionChosen = true;
+              break;
+            }
+            else
+            {
+              std::cout << "Not enough stamina\n";
+              break;
+            }
+          case 2:
+            enoughStamina = combatants[i].heavy_attack();
+            if (enoughStamina)
+            {
+              std::cout << "Heavy Attack\n\n";
+              combatants[i].actionChosen = true;
+              break;
+            }
+            else
+            {
+              std::cout << "Not enough stamina\n";
+              break;
+            }
+          case 3:
+            enoughStamina = combatants[i].dodge();
+            if (enoughStamina)
+            {
+              std::cout << "Dodge\n\n";
+              combatants[i].actionChosen = true;
+              break;
+            }
+            else
+            {
+              std::cout << "Not enough stamina\n";
+              break;
+            }
 
-    //   for (int m = 0; m < 2; m++)
-    //   {
-    //     if (combatants[m].hp <= 0)
-    //     {
-    //       victory = true;
-    //     }
-    //   }
-    // }
+          case 4:
+            combatants[i].guard();
+            std::cout << "Guard\n\n";
+            combatants[i].actionChosen = true;
+            break;
+          case 5:
+            combatants[i].resetTempStats();
+            std::cout << "Do nothing\n\n";
+            combatants[i].actionChosen = true;
+            break;
+          default:
+            break;
+          }
+
+          while (window.pollEvent(event))
+          {
+
+            switch (event.type)
+            {
+            case sf::Event::Closed:
+              victory = false;
+              menu = false;
+              window.close();
+              break;
+
+            default:
+              break;
+            }
+          }
+        }
+      }
+      // Actions are applied. Whoever has the highest
+      // speed goes first.
+      if (combatants[0].actionChosen && combatants[1].actionChosen)
+      {
+        if (combatants[0].speed > combatants[1].speed)
+        {
+          for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
+          {
+            outcome = combatants[n].applyAction(combatants[m]);
+            std::cout << outcome + "\n";
+            Sleep(2);
+          }
+        }
+        else
+        {
+          for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
+          {
+            outcome = combatants[m].applyAction(combatants[n]);
+            std::cout << outcome + "\n";
+            Sleep(2);
+          }
+        }
+
+        // Counter attacks are applied if there are any.
+        for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
+        {
+          if (combatants[m].prepCounterAttack)
+          {
+            outcome = combatants[n].receiveCounterAttack(combatants[m]);
+            std::cout << outcome + "\n";
+          }
+        }
+
+        // Reset the action dependant stats after every turn
+        // and regain stamina.
+        for (int n = 0; n < 2; n++)
+        {
+          combatants[n].resetTempStats();
+          combatants[n].increaseStamina();
+        }
+      }
+
+      std::cout << "========================================\n";
+      std::cout << "Name: " << combatants[0].name << " // HP: " << combatants[0].hp << " // Stamina: " << combatants[0].stamina << "\n";
+      std::cout << "Name: " << combatants[1].name << " // HP: " << combatants[1].hp << " // Stamina: " << combatants[1].stamina << "\n";
+      std::cout << "========================================\n";
+
+      for (int m = 0; m < 2; m++)
+      {
+        if (combatants[m].hp <= 0)
+        {
+          victory = true;
+          window.close();
+        }
+      }
+    }
   }
   return 0;
 }
