@@ -137,7 +137,6 @@ int main()
     {
       player2Bot = true;
       choicePlayer2 = characters[bot(1)].name;
-      std::cout << "bot chooses " << choicePlayer2 << "\n";
     }
 
     for (int j = 0; j < players.size(); j++)
@@ -168,9 +167,22 @@ int main()
     stats2.setFillColor(sf::Color::Black);
     stats2.setPosition(sf::Vector2f(1450.f, 0.f));
 
+    sf::Sprite lightAttackCard;
+    sf::Texture lightAttackCardTexture;
+
+    if (!lightAttackCardTexture.loadFromFile("assets/light_attack_card.png"))
+    {
+      std::cout << "Error loading light attack card";
+      return 0;
+    };
+
+    lightAttackCard.setTexture(lightAttackCardTexture);
+    lightAttackCard.setPosition(sf::Vector2f(200.f, 400.f));
+    lightAttackCard.scale(sf::Vector2f(0.25, 0.25));
+
     std::cout << "\nBegin!\n";
     // Apply action Loop
-    while (victory != true)
+    while (!victory)
     {
       window.clear();
       stats1String = "HP: " + std::to_string(combatants[0].hp) + " \n" + "STM: " + std::to_string(combatants[0].stamina) + " \n";
@@ -189,6 +201,10 @@ int main()
         {
           window.clear();
           window.draw(background);
+          window.draw(stats1);
+          window.draw(stats2);
+          window.draw(lightAttackCard);
+          window.display();
 
           if (combatants[i].isBot)
           {
@@ -207,7 +223,6 @@ int main()
             enoughStamina = combatants[i].light_attack();
             if (enoughStamina)
             {
-              window.close();
               std::cout << "Light Attack\n\n";
               combatants[i].actionChosen = true;
               break;
@@ -257,6 +272,7 @@ int main()
           default:
             break;
           }
+          action = 0;
 
           while (window.pollEvent(event))
           {
@@ -267,6 +283,17 @@ int main()
               victory = false;
               menu = false;
               window.close();
+              break;
+            case sf::Event::MouseButtonPressed:
+              if (event.mouseButton.button == sf::Mouse::Left)
+              {
+                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                if (lightAttackCard.getGlobalBounds().contains(mousePosition))
+                {
+                  action = 1;
+                }
+              }
               break;
 
             default:
