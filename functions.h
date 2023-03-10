@@ -27,9 +27,9 @@ int bot(int section) {
       break;
     case 2:
     // Choose action
-      i = 4;
+      i = 5;
       break;
   }
   Sleep(3);
-return 0 + rand() % i;
+return 1 + rand() % i;
 }
