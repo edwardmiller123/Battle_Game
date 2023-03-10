@@ -16,10 +16,10 @@ int main()
   bool menu = true;
   std::vector<character> combatants, characters;
   std::vector<std::string> players;
-  std::string choicePlayer1, choicePlayer2, outcome, choice, playerStr;
-  std::stringstream stream;
+  std::string choicePlayer1, choicePlayer2, outcome, choice;
   int action;
   int player = 1;
+  std::string displayString;
 
   sf::RenderWindow window(sf::VideoMode(1600, 800), "Battle Game");
 
@@ -84,12 +84,10 @@ int main()
 
       combatants = {};
 
-      stream << player;
-      stream >> playerStr;
-      std::string displayString = "Player " + playerStr + " Choose your character:\n";
+      displayString = "Player " + std::to_string(player) + " Choose your character:\n";
       text.setString(displayString);
       window.draw(text);
-      
+
       while (window.pollEvent(event))
       {
 
@@ -103,6 +101,7 @@ int main()
           if (event.mouseButton.button == sf::Mouse::Left)
           {
             sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
             for (int j = 0; j < characters.size(); j++)
             {
 
@@ -119,7 +118,7 @@ int main()
           break;
         }
       }
-    
+
       window.display();
 
       if (player == 3)
