@@ -184,7 +184,23 @@ int main()
       actionCards[n].sprite.setPosition(sf::Vector2f(actionCards[n].posX, actionCards[n].posY));
       actionCards[n].sprite.scale(sf::Vector2f(actionCards[n].scaleX, actionCards[n].scaleY));
     }
-    std::cout << "\nBegin!\n";
+
+    int counter = 0;
+    text.setCharacterSize(100);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(sf::Vector2f(650.f, 225.f));
+    text.setString("\nBegin!\n");
+    if (!victory && !menu)
+    {
+      while (counter <= 500)
+      {
+        window.clear();
+        window.draw(text);
+        window.display();
+        counter++;
+      }
+    }
+
     // Apply action Loop
     while (!victory)
     {
