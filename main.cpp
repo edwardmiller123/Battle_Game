@@ -285,7 +285,7 @@ int main()
             switch (event.type)
             {
             case sf::Event::Closed:
-              victory = false;
+              victory = true;
               menu = false;
               combatants[0].actionChosen = true;
               combatants[1].actionChosen = true;
