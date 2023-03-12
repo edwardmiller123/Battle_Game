@@ -115,6 +115,7 @@ int main()
             if (botSprite.getGlobalBounds().contains(mousePosition) && player == 2)
             {
               choicePlayer2 = "bot";
+              player++;
             }
           }
           break;
@@ -131,7 +132,6 @@ int main()
         menu = false;
       }
     }
-
     // Menu closes. Character choices are prepared for the game.
 
     if (choicePlayer2 == "bot")
@@ -169,7 +169,6 @@ int main()
     stats2.setPosition(sf::Vector2f(1400.f, 0.f));
 
     actionCards = initActionCards();
-
     for (int n = 0; n < actionCards.size(); n++)
     {
       if (!actionCards[n].texture.loadFromFile(actionCards[n].texturePath))
@@ -205,7 +204,7 @@ int main()
           window.draw(stats1);
           window.draw(stats2);
 
-          for (int m; m < actionCards.size(); m++)
+          for (int m = 0; m < actionCards.size(); m++)
           {
             window.draw(actionCards[m].sprite);
           }
@@ -296,7 +295,7 @@ int main()
               if (event.mouseButton.button == sf::Mouse::Left)
               {
                 sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                for (int j; j < actionCards.size(); j++)
+                for (int j = 0; j < actionCards.size(); j++)
                 {
                   if (actionCards[j].sprite.getGlobalBounds().contains(mousePosition))
                   {
@@ -353,11 +352,6 @@ int main()
           combatants[n].increaseStamina();
         }
       }
-
-      std::cout << "========================================\n";
-      std::cout << "Name: " << combatants[0].name << " // HP: " << combatants[0].hp << " // Stamina: " << combatants[0].stamina << "\n";
-      std::cout << "Name: " << combatants[1].name << " // HP: " << combatants[1].hp << " // Stamina: " << combatants[1].stamina << "\n";
-      std::cout << "========================================\n";
 
       for (int m = 0; m < 2; m++)
       {

@@ -1,4 +1,5 @@
 #include <string>
+#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
 class actionCard
@@ -10,7 +11,7 @@ public:
   float posX, posY, scaleX, scaleY;
   int actionNumber;
 
-  actionCard newActionCard(std::string newTexturePath, float newPosX, float newPosY, float newScaleX, float newScaleY, int newActionNumber)
+  void newActionCard(std::string newTexturePath, float newPosX, float newPosY, float newScaleX, float newScaleY, int newActionNumber)
   {
     texturePath = newTexturePath;
     posX = newPosX;
