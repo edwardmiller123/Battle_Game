@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-
+#include "actionCard.h"
 #include "characters.h"
 
 // To compile:
@@ -20,6 +20,7 @@ int main()
   int action;
   int player = 1;
   std::string displayString;
+  std::vector<actionCard> actionCards;
 
   sf::RenderWindow window(sf::VideoMode(1600, 800), "Battle Game");
 
@@ -167,49 +168,19 @@ int main()
     stats2.setFillColor(sf::Color::Black);
     stats2.setPosition(sf::Vector2f(1400.f, 0.f));
 
-    sf::Sprite lightAttackCard, heavyAttackCard, dodgeCard, guardCard;
-    sf::Texture lightAttackCardTexture, heavyAttackCardTexture, dodgeCardTexture, guardCardTexture;
+    actionCards = initActionCards();
 
-    if (!lightAttackCardTexture.loadFromFile("assets/light_attack_card.png"))
+    for (int n = 0; n < actionCards.size(); n++)
     {
-      std::cout << "Error loading light attack card";
-      return 0;
-    };
-
-    if (!heavyAttackCardTexture.loadFromFile("assets/heavy_attack_card.png"))
-    {
-      std::cout << "Error loading heavy attack card";
-      return 0;
-    };
-
-    if (!dodgeCardTexture.loadFromFile("assets/dodge_card.png"))
-    {
-      std::cout << "Error loading dodge card";
-      return 0;
-    };
-
-    if (!guardCardTexture.loadFromFile("assets/guard_card.png"))
-    {
-      std::cout << "Error loading guard attack card";
-      return 0;
-    };
-
-    lightAttackCard.setTexture(lightAttackCardTexture);
-    lightAttackCard.setPosition(sf::Vector2f(200.f, 500.f));
-    lightAttackCard.scale(sf::Vector2f(0.125, 0.125));
-
-    heavyAttackCard.setTexture(heavyAttackCardTexture);
-    heavyAttackCard.setPosition(sf::Vector2f(500.f, 500.f));
-    heavyAttackCard.scale(sf::Vector2f(0.125, 0.125));
-
-    dodgeCard.setTexture(dodgeCardTexture);
-    dodgeCard.setPosition(sf::Vector2f(800.f, 500.f));
-    dodgeCard.scale(sf::Vector2f(0.125, 0.125));
-
-    guardCard.setTexture(guardCardTexture);
-    guardCard.setPosition(sf::Vector2f(1200.f, 500.f));
-    guardCard.scale(sf::Vector2f(0.125, 0.125));
-
+      if (!actionCards[n].texture.loadFromFile(actionCards[n].texturePath))
+      {
+        std::cout << "Error loading action card" + std::to_string(n) + "\n";
+        return 0;
+      };
+      actionCards[n].sprite.setTexture(actionCards[n].texture);
+      actionCards[n].sprite.setPosition(sf::Vector2f(actionCards[n].posX, actionCards[n].posY));
+      actionCards[n].sprite.scale(sf::Vector2f(actionCards[n].scaleX, actionCards[n].scaleY));
+    }
     std::cout << "\nBegin!\n";
     // Apply action Loop
     while (!victory)
@@ -233,10 +204,12 @@ int main()
           window.draw(background);
           window.draw(stats1);
           window.draw(stats2);
-          window.draw(lightAttackCard);
-          window.draw(heavyAttackCard);
-          window.draw(dodgeCard);
-          window.draw(guardCard);
+
+          for (int m; m < actionCards.size(); m++)
+          {
+            window.draw(actionCards[m].sprite);
+          }
+
           window.display();
 
           if (combatants[i].isBot)
@@ -323,22 +296,12 @@ int main()
               if (event.mouseButton.button == sf::Mouse::Left)
               {
                 sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
-                if (lightAttackCard.getGlobalBounds().contains(mousePosition))
+                for (int j; j < actionCards.size(); j++)
                 {
-                  action = 1;
-                }
-                else if (heavyAttackCard.getGlobalBounds().contains(mousePosition))
-                {
-                  action = 2;
-                }
-                else if (dodgeCard.getGlobalBounds().contains(mousePosition))
-                {
-                  action = 3;
-                }
-                else if (guardCard.getGlobalBounds().contains(mousePosition))
-                {
-                  action = 4;
+                  if (actionCards[j].sprite.getGlobalBounds().contains(mousePosition))
+                  {
+                    action = actionCards[j].actionNumber;
+                  }
                 }
               }
               break;
