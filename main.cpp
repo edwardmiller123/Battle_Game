@@ -24,7 +24,6 @@ int main()
   std::vector<actionCard> actionCards;
 
   sf::RenderWindow window(sf::VideoMode(1600, 800), "Battle Game");
-
   sf::Event event;
 
   sf::Sprite botSprite, background;
@@ -301,7 +300,7 @@ int main()
 
           while (window.pollEvent(event))
           {
-
+            sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
             switch (event.type)
             {
             case sf::Event::Closed:
@@ -314,7 +313,6 @@ int main()
             case sf::Event::MouseButtonPressed:
               if (event.mouseButton.button == sf::Mouse::Left)
               {
-                sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 for (int j = 0; j < actionCards.size(); j++)
                 {
                   if (actionCards[j].sprite.getGlobalBounds().contains(mousePosition))
@@ -324,7 +322,27 @@ int main()
                 }
               }
               break;
-
+            case sf::Event::MouseMoved:
+              for (int j = 0; j < actionCards.size(); j++)
+              {
+                if (actionCards[j].sprite.getGlobalBounds().contains(mousePosition))
+                {
+                  if (!actionCards[j].texture.loadFromFile(actionCards[j].selectedTexturePath))
+                  {
+                    std::cout << "Error loading selected action card" + std::to_string(j) + "\n";
+                    return 0;
+                  };
+                }
+                else
+                {
+                  if (!actionCards[j].texture.loadFromFile(actionCards[j].texturePath))
+                  {
+                    std::cout << "Error loading action card" + std::to_string(j) + "\n";
+                    return 0;
+                  };
+                }
+              }
+              break;
             default:
               break;
             }
