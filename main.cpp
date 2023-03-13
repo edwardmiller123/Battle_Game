@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+
 #include "actionCard.h"
 #include "characters.h"
 
@@ -57,7 +58,7 @@ int main()
   text.setFont(font);
   text.setCharacterSize(50);
   text.setFillColor(sf::Color::Black);
-  text.setPosition(sf::Vector2f(300.f, 200.f));
+  text.setPosition(sf::Vector2f(350.f, 200.f));
 
   // Start Game loop.
   while (window.isOpen())
@@ -78,10 +79,13 @@ int main()
         };
         characters[i].sprite.setTexture(characters[i].texture);
         characters[i].sprite.scale(sf::Vector2f(0.125, 0.125));
-        characters[i].sprite.setPosition(sf::Vector2f(i * 200 + 10.f, 400.f));
+        characters[i].sprite.setPosition(sf::Vector2f(i * 200 + 275.f, 400.f));
         window.draw(characters[i].sprite);
       }
-      window.draw(botSprite);
+      if (player == 2)
+      {
+        window.draw(botSprite);
+      }
 
       combatants = {};
 
@@ -159,12 +163,12 @@ int main()
     std::string stats1String, stats2String;
 
     stats1.setFont(font);
-    stats1.setCharacterSize(30);
+    stats1.setCharacterSize(25);
     stats1.setFillColor(sf::Color::Black);
     stats1.setPosition(sf::Vector2f(0.f, 0.f));
 
     stats2.setFont(font);
-    stats2.setCharacterSize(30);
+    stats2.setCharacterSize(25);
     stats2.setFillColor(sf::Color::Black);
     stats2.setPosition(sf::Vector2f(1400.f, 0.f));
 
@@ -180,7 +184,23 @@ int main()
       actionCards[n].sprite.setPosition(sf::Vector2f(actionCards[n].posX, actionCards[n].posY));
       actionCards[n].sprite.scale(sf::Vector2f(actionCards[n].scaleX, actionCards[n].scaleY));
     }
-    std::cout << "\nBegin!\n";
+
+    int counter = 0;
+    text.setCharacterSize(100);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(sf::Vector2f(650.f, 225.f));
+    text.setString("\nBegin!\n");
+    if (!victory && !menu)
+    {
+      while (counter <= 500)
+      {
+        window.clear();
+        window.draw(text);
+        window.display();
+        counter++;
+      }
+    }
+
     // Apply action Loop
     while (!victory)
     {
