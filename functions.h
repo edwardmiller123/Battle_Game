@@ -1,6 +1,5 @@
 #include <iostream>
 #include <random>
-#include <windows.h>
 #include <time.h>
 
 bool actionSucceeds(int number)
@@ -32,6 +31,5 @@ int bot(int section) {
       j = 1;
       break;
   }
-  Sleep(3);
 return j + rand() % i;
 }

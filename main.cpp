@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -15,6 +16,7 @@ int main()
   bool victory = false;
   bool player2Bot = false;
   bool menu = true;
+  bool actionsApplied;
   std::vector<character> combatants, characters;
   std::vector<std::string> players;
   std::string choicePlayer1, choicePlayer2, outcome, choice;
@@ -48,7 +50,7 @@ int main()
   botSprite.scale(sf::Vector2f(0.5, 0.5));
 
   sf::Font font;
-  sf::Text text, stats1, stats2;
+  sf::Text text, stats1, stats2, infoText;
   if (!font.loadFromFile("assets/8bitOperatorPlus8-Regular.ttf"))
   {
     std::cout << "Error loading font\n";
@@ -77,7 +79,7 @@ int main()
           return 0;
         };
         characters[i].sprite.setTexture(characters[i].texture);
-        characters[i].sprite.scale(sf::Vector2f(0.125, 0.125));
+        characters[i].sprite.scale(sf::Vector2f(0.25, 0.25));
         characters[i].sprite.setPosition(sf::Vector2f(i * 200 + 275.f, 400.f));
         window.draw(characters[i].sprite);
       }
@@ -154,17 +156,22 @@ int main()
       combatants[1].isBot = true;
     }
 
-    std::string stats1String, stats2String;
+    std::string stats1String, stats2String, infoTextString;
+
+    infoText.setFont(font);
+    infoText.setCharacterSize(30);
+    infoText.setFillColor(sf::Color::Black);
+    infoText.setPosition(sf::Vector2f(550.f, 100.f));
 
     stats1.setFont(font);
     stats1.setCharacterSize(25);
     stats1.setFillColor(sf::Color::Black);
-    stats1.setPosition(sf::Vector2f(0.f, 0.f));
+    stats1.setPosition(sf::Vector2f(10.f, 0.f));
 
     stats2.setFont(font);
     stats2.setCharacterSize(25);
     stats2.setFillColor(sf::Color::Black);
-    stats2.setPosition(sf::Vector2f(1400.f, 0.f));
+    stats2.setPosition(sf::Vector2f(1390.f, 0.f));
 
     actionCards = initActionCards();
     for (int n = 0; n < actionCards.size(); n++)
@@ -199,9 +206,9 @@ int main()
     while (!victory)
     {
       window.clear();
-      stats1String = "Name: " + combatants[0].name + " \n" + "HP: " + std::to_string(combatants[0].hp) + " \n" + "STM: " + std::to_string(combatants[0].stamina) + " \n";
+      stats1String = combatants[0].name + " \n" + "HP: " + std::to_string(combatants[0].hp) + " \n" + "STM: " + std::to_string(combatants[0].stamina) + " \n" + combatants[0].currentAction + " \n";
       stats1.setString(stats1String);
-      stats2String = "Name: " + combatants[1].name + " \n" + "HP: " + std::to_string(combatants[1].hp) + " \n" + "STM: " + std::to_string(combatants[1].stamina) + " \n";
+      stats2String = combatants[1].name + " \n" + "HP: " + std::to_string(combatants[1].hp) + " \n" + "STM: " + std::to_string(combatants[1].stamina) + " \n" + combatants[1].currentAction + " \n";
       stats2.setString(stats2String);
       window.draw(background);
       window.draw(stats1);
@@ -223,17 +230,23 @@ int main()
             window.draw(actionCards[m].sprite);
           }
 
-          window.display();
-
           if (combatants[i].isBot)
           {
-            std::cout << combatants[i].name << " (CPU) chooses...\n";
+            infoTextString = combatants[i].name + " (CPU) chooses...\n";
             action = bot(2);
           }
           else
           {
-            std::cout << "Player " << i + 1 << ": Choose action...\n";
-            std::cin >> action;
+            infoTextString = "Player " + std::to_string(i + 1) +  " : Choose action...\n";
+          }
+
+          infoText.setString(infoTextString);
+          window.draw(infoText);
+          window.display();
+
+          if (combatants[i].isBot) {
+            // Slows the bots choices a bit
+            Sleep(2000);
           }
 
           switch (action)
@@ -353,7 +366,6 @@ int main()
           for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
           {
             outcome = combatants[n].applyAction(combatants[m]);
-            std::cout << outcome + "\n";
             Sleep(2);
           }
         }
@@ -362,7 +374,6 @@ int main()
           for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
           {
             outcome = combatants[m].applyAction(combatants[n]);
-            std::cout << outcome + "\n";
             Sleep(2);
           }
         }
@@ -372,7 +383,7 @@ int main()
         {
           if (combatants[m].prepCounterAttack)
           {
-            outcome = combatants[n].receiveCounterAttack(combatants[m]);
+            outcome += combatants[n].receiveCounterAttack(combatants[m]);
             std::cout << outcome + "\n";
           }
         }
