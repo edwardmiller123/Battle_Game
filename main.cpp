@@ -217,6 +217,9 @@ int main()
 
       for (int i = 0; i < 2; i++)
       {
+        // This ensures the correct stamina message is displayed each turn.
+        enoughStamina = true;
+
         // Choose action loop
         while (!combatants[i].actionChosen)
         {
@@ -230,21 +233,25 @@ int main()
             window.draw(actionCards[m].sprite);
           }
 
-          if (combatants[i].isBot)
+          if (enoughStamina)
           {
-            infoTextString = combatants[i].name + " (CPU) chooses...\n";
-            action = bot(2);
-          }
-          else
-          {
-            infoTextString = "Player " + std::to_string(i + 1) +  " : Choose action...\n";
+            if (combatants[i].isBot)
+            {
+              infoTextString = combatants[i].name + " (CPU) chooses...\n";
+              action = bot(2);
+            }
+            else
+            {
+              infoTextString = "Player " + std::to_string(i + 1) + " : Choose action...\n";
+            }
           }
 
           infoText.setString(infoTextString);
           window.draw(infoText);
           window.display();
 
-          if (combatants[i].isBot) {
+          if (combatants[i].isBot)
+          {
             // Slows the bots choices a bit
             Sleep(2000);
           }
@@ -260,7 +267,7 @@ int main()
             }
             else
             {
-              std::cout << "Not enough stamina\n";
+              infoTextString = "Not enough stamina\n";
               break;
             }
           case 2:
@@ -272,7 +279,7 @@ int main()
             }
             else
             {
-              std::cout << "Not enough stamina\n";
+              infoTextString = "Not enough stamina\n";
               break;
             }
           case 3:
@@ -284,7 +291,7 @@ int main()
             }
             else
             {
-              std::cout << "Not enough stamina\n";
+              infoTextString = "Not enough stamina\n";
               break;
             }
 
@@ -296,6 +303,7 @@ int main()
           default:
             break;
           }
+
           action = 0;
 
           while (window.pollEvent(event))
