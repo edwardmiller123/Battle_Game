@@ -117,7 +117,8 @@ int main()
             }
             if (botSprite.getGlobalBounds().contains(mousePosition) && player == 2)
             {
-              choicePlayer2 = "bot";
+              player2Bot = true;
+              players.push_back(characters[bot(1)].name);
               player++;
             }
           }
@@ -136,12 +137,6 @@ int main()
       }
     }
     // Menu closes. Character choices are prepared for the game.
-
-    if (choicePlayer2 == "bot")
-    {
-      player2Bot = true;
-      choicePlayer2 = characters[bot(1)].name;
-    }
 
     for (int j = 0; j < players.size(); j++)
     {

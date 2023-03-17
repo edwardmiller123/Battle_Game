@@ -18,18 +18,20 @@ bool actionSucceeds(int number)
 
 // "Bot" actually just randomly selects numbers.
 int bot(int section) {
-  int i;
+  int i, j;
   srand(time(0));
   switch (section) {
     case 1:
     // Choose character
       i = 3;
+      j = 0;
       break;
     case 2:
     // Choose action
-      i = 5;
+      i = 4;
+      j = 1;
       break;
   }
   Sleep(3);
-return 1 + rand() % i;
+return j + rand() % i;
 }
