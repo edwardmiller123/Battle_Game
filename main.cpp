@@ -255,7 +255,6 @@ int main()
             enoughStamina = combatants[i].light_attack();
             if (enoughStamina)
             {
-              std::cout << "Light Attack\n\n";
               combatants[i].actionChosen = true;
               break;
             }
@@ -268,7 +267,6 @@ int main()
             enoughStamina = combatants[i].heavy_attack();
             if (enoughStamina)
             {
-              std::cout << "Heavy Attack\n\n";
               combatants[i].actionChosen = true;
               break;
             }
@@ -281,7 +279,6 @@ int main()
             enoughStamina = combatants[i].dodge();
             if (enoughStamina)
             {
-              std::cout << "Dodge\n\n";
               combatants[i].actionChosen = true;
               break;
             }
@@ -294,11 +291,6 @@ int main()
           case 4:
             combatants[i].guard();
             std::cout << "Guard\n\n";
-            combatants[i].actionChosen = true;
-            break;
-          case 5:
-            combatants[i].resetTempStats();
-            std::cout << "Do nothing\n\n";
             combatants[i].actionChosen = true;
             break;
           default:
