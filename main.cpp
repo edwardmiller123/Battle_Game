@@ -21,6 +21,7 @@ int main()
   std::vector<std::string> players;
   std::string choicePlayer1, choicePlayer2, outcome, choice;
   int action;
+  int animationCounter = 0;
   int player = 1;
   std::string displayString;
   std::vector<actionCard> actionCards;
@@ -30,14 +31,13 @@ int main()
 
   sf::Sprite botSprite, background;
   sf::Texture botIcon, backgroundTexture;
-  if (!backgroundTexture.loadFromFile("assets/background.png"))
+  if (!backgroundTexture.loadFromFile("assets/arena.png"))
   {
     std::cout << " background texture didnt load";
     return 0;
   };
   background.setTexture(backgroundTexture);
   background.setPosition(0, 0);
-  background.scale(sf::Vector2f(2.2, 2.2));
 
   if (!botIcon.loadFromFile("assets/bot.png"))
   {
@@ -58,6 +58,8 @@ int main()
   }
   text.setFont(font);
   text.setCharacterSize(50);
+  text.setOutlineColor(sf::Color::White);
+  text.setOutlineThickness(3);
   text.setFillColor(sf::Color::Black);
   text.setPosition(sf::Vector2f(350.f, 200.f));
 
@@ -80,7 +82,7 @@ int main()
         };
         characters[i].sprite.setTexture(characters[i].texture);
         characters[i].sprite.scale(sf::Vector2f(0.25, 0.25));
-        characters[i].sprite.setPosition(sf::Vector2f(i * 200 + 275.f, 400.f));
+        characters[i].sprite.setPosition(sf::Vector2f(i * 200 + 275.f, 475.f));
         window.draw(characters[i].sprite);
       }
       if (player == 2)
@@ -157,20 +159,50 @@ int main()
     }
 
     std::string stats1String, stats2String, infoTextString;
+    float startPosX;
+
+    // draw combatants default positions
+
+    for (int l = 0; l < 2; l++)
+    {
+      if (!combatants[l].texture.loadFromFile(combatants[l].texturePath))
+      {
+        std::cout << "a character icon texture didnt load";
+        return 0;
+      };
+      combatants[l].sprite.setTexture(combatants[l].texture);
+      combatants[l].sprite.scale(sf::Vector2f(0.25, 0.25));
+      switch (l)
+      {
+      case 0:
+        startPosX = 200;
+        break;
+      case 1:
+        startPosX = 800;
+        break;
+      };
+      combatants[l].sprite.setPosition(sf::Vector2f(startPosX, 800.f));
+    }
 
     infoText.setFont(font);
     infoText.setCharacterSize(30);
     infoText.setFillColor(sf::Color::Black);
+    infoText.setOutlineColor(sf::Color::White);
+    infoText.setOutlineThickness(3);
     infoText.setPosition(sf::Vector2f(550.f, 100.f));
 
     stats1.setFont(font);
     stats1.setCharacterSize(25);
     stats1.setFillColor(sf::Color::Black);
+    stats1.setOutlineColor(sf::Color::White);
+    stats1.setOutlineThickness(3);
     stats1.setPosition(sf::Vector2f(10.f, 0.f));
 
     stats2.setFont(font);
     stats2.setCharacterSize(25);
     stats2.setFillColor(sf::Color::Black);
+    stats2.setOutlineColor(sf::Color::White);
+    stats2.setOutlineThickness(3);
     stats2.setPosition(sf::Vector2f(1390.f, 0.f));
 
     actionCards = initActionCards();
@@ -205,15 +237,10 @@ int main()
     // Apply action Loop
     while (!victory)
     {
-      window.clear();
       stats1String = combatants[0].name + " \n" + "HP: " + std::to_string(combatants[0].hp) + " \n" + "STM: " + std::to_string(combatants[0].stamina) + " \n" + combatants[0].currentAction + " \n";
       stats1.setString(stats1String);
       stats2String = combatants[1].name + " \n" + "HP: " + std::to_string(combatants[1].hp) + " \n" + "STM: " + std::to_string(combatants[1].stamina) + " \n" + combatants[1].currentAction + " \n";
       stats2.setString(stats2String);
-      window.draw(background);
-      window.draw(stats1);
-      window.draw(stats2);
-      window.display();
 
       for (int i = 0; i < 2; i++)
       {
@@ -227,6 +254,10 @@ int main()
           window.draw(background);
           window.draw(stats1);
           window.draw(stats2);
+          for (int l = 0; l < 2; l++)
+          {
+            window.draw(combatants[l].sprite);
+          }
 
           for (int m = 0; m < actionCards.size(); m++)
           {
@@ -366,7 +397,6 @@ int main()
           for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
           {
             outcome = combatants[n].applyAction(combatants[m]);
-            Sleep(2);
           }
         }
         else
@@ -374,7 +404,6 @@ int main()
           for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
           {
             outcome = combatants[m].applyAction(combatants[n]);
-            Sleep(2);
           }
         }
 
