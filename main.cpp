@@ -58,9 +58,9 @@ int main()
   }
   text.setFont(font);
   text.setCharacterSize(50);
-  text.setOutlineColor(sf::Color::White);
-  text.setOutlineThickness(3);
-  text.setFillColor(sf::Color::Black);
+  text.setOutlineColor(sf::Color::Black);
+  text.setOutlineThickness(4);
+  text.setFillColor(sf::Color::Magenta);
   text.setPosition(sf::Vector2f(350.f, 200.f));
 
   // Start Game loop.
@@ -186,23 +186,23 @@ int main()
 
     infoText.setFont(font);
     infoText.setCharacterSize(30);
-    infoText.setFillColor(sf::Color::Black);
-    infoText.setOutlineColor(sf::Color::White);
-    infoText.setOutlineThickness(3);
+    infoText.setFillColor(sf::Color::Magenta);
+    infoText.setOutlineColor(sf::Color::Black);
+    infoText.setOutlineThickness(4);
     infoText.setPosition(sf::Vector2f(550.f, 100.f));
 
     stats1.setFont(font);
     stats1.setCharacterSize(25);
-    stats1.setFillColor(sf::Color::Black);
-    stats1.setOutlineColor(sf::Color::White);
-    stats1.setOutlineThickness(3);
+    stats1.setFillColor(sf::Color::Magenta);
+    stats1.setOutlineColor(sf::Color::Black);
+    stats1.setOutlineThickness(4);
     stats1.setPosition(sf::Vector2f(10.f, 0.f));
 
     stats2.setFont(font);
     stats2.setCharacterSize(25);
-    stats2.setFillColor(sf::Color::Black);
-    stats2.setOutlineColor(sf::Color::White);
-    stats2.setOutlineThickness(3);
+    stats2.setFillColor(sf::Color::Magenta);
+    stats2.setOutlineColor(sf::Color::Black);
+    stats2.setOutlineThickness(4);
     stats2.setPosition(sf::Vector2f(1390.f, 0.f));
 
     actionCards = initActionCards();
