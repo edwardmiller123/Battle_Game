@@ -3,7 +3,8 @@
 
 #include "character.h"
 
-std::vector<character> initCharacters() {
+std::vector<character> initCharacters()
+{
   character speedyMcSpeed, bigBoi, joe, veryBadCharacter, korok;
   std::vector<character> characters;
 

@@ -10,6 +10,7 @@
 //  g++ -I C:\Users\edwar\Documents\codeProjects\C++\SFML-2.5.1\include -c main.cpp -o main.o
 //  g++ -L C:\Users\edwar\Documents\codeProjects\C++\SFML-2.5.1\lib .\main.o -o game.exe -lmingw32 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-main -mwindows
 
+
 int main()
 {
   bool enoughStamina;
@@ -90,8 +91,6 @@ int main()
         window.draw(botSprite);
       }
 
-      combatants = {};
-
       displayString = "Player " + std::to_string(player) + " Choose your character:\n";
       text.setString(displayString);
       window.draw(text);
@@ -163,27 +162,6 @@ int main()
 
     // draw combatants default positions
 
-    for (int l = 0; l < 2; l++)
-    {
-      if (!combatants[l].texture.loadFromFile(combatants[l].texturePath))
-      {
-        std::cout << "a character icon texture didnt load";
-        return 0;
-      };
-      combatants[l].sprite.setTexture(combatants[l].texture);
-      combatants[l].sprite.scale(sf::Vector2f(0.25, 0.25));
-      switch (l)
-      {
-      case 0:
-        startPosX = 200;
-        break;
-      case 1:
-        startPosX = 800;
-        break;
-      };
-      combatants[l].sprite.setPosition(sf::Vector2f(startPosX, 800.f));
-    }
-
     infoText.setFont(font);
     infoText.setCharacterSize(30);
     infoText.setFillColor(sf::Color::Magenta);
@@ -218,6 +196,26 @@ int main()
       actionCards[n].sprite.scale(sf::Vector2f(actionCards[n].scaleX, actionCards[n].scaleY));
     }
 
+    for (int l = 0; l < 2; l++)
+    {
+      if (!combatants[l].texture.loadFromFile(combatants[l].texturePath))
+      {
+        std::cout << "a character icon texture didnt load";
+        return 0;
+      };
+      combatants[l].sprite.setTexture(combatants[l].texture);
+      switch (l)
+      {
+      case 0:
+        startPosX = 500;
+        break;
+      case 1:
+        startPosX = 1000;
+        break;
+      };
+      combatants[l].sprite.setPosition(sf::Vector2f(startPosX, 500.f));
+    }
+
     int counter = 0;
     text.setCharacterSize(100);
     text.setFillColor(sf::Color::White);
@@ -233,7 +231,6 @@ int main()
         counter++;
       }
     }
-
     // Apply action Loop
     while (!victory)
     {
@@ -328,7 +325,6 @@ int main()
 
           case 4:
             combatants[i].guard();
-            std::cout << "Guard\n\n";
             combatants[i].actionChosen = true;
             break;
           default:
