@@ -20,7 +20,7 @@ int main()
   bool actionsApplied;
   std::vector<character> combatants, characters;
   std::vector<std::string> players;
-  std::string choicePlayer1, choicePlayer2, outcome, choice;
+  std::string outcome;
   int action;
   int animationCounter = 0;
   int player = 1;
@@ -32,7 +32,7 @@ int main()
 
   sf::Sprite botSprite, background;
   sf::Texture botIcon, backgroundTexture;
-  if (!backgroundTexture.loadFromFile("assets/arena.png"))
+  if (!backgroundTexture.loadFromFile("assets/arena_edit_2.png"))
   {
     std::cout << " background texture didnt load";
     return 0;
@@ -47,7 +47,7 @@ int main()
   };
 
   botSprite.setTexture(botIcon);
-  botSprite.setPosition(sf::Vector2f(1450.f, 400.f));
+  botSprite.setPosition(sf::Vector2f(1450.f, 500.f));
   botSprite.scale(sf::Vector2f(0.5, 0.5));
 
   sf::Font font;
@@ -59,9 +59,9 @@ int main()
   }
   text.setFont(font);
   text.setCharacterSize(50);
-  text.setOutlineColor(sf::Color::Black);
+  text.setOutlineColor(sf::Color::White);
   text.setOutlineThickness(4);
-  text.setFillColor(sf::Color::Magenta);
+  text.setFillColor(sf::Color::Black);
   text.setPosition(sf::Vector2f(350.f, 200.f));
 
   // Start Game loop.
@@ -160,8 +160,6 @@ int main()
     std::string stats1String, stats2String, infoTextString;
     float startPosX;
 
-    // draw combatants default positions
-
     infoText.setFont(font);
     infoText.setCharacterSize(30);
     infoText.setFillColor(sf::Color::Magenta);
@@ -196,6 +194,7 @@ int main()
       actionCards[n].sprite.scale(sf::Vector2f(actionCards[n].scaleX, actionCards[n].scaleY));
     }
 
+    // draw combatants default positions
     for (int l = 0; l < 2; l++)
     {
       if (!combatants[l].texture.loadFromFile(combatants[l].texturePath))
@@ -207,7 +206,7 @@ int main()
       switch (l)
       {
       case 0:
-        startPosX = 500;
+        startPosX = 400;
         break;
       case 1:
         startPosX = 1000;
