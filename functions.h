@@ -36,3 +36,9 @@ int bot(int section)
   }
   return j + rand() % i;
 }
+
+struct actionTracker
+{
+  std::string name, action, player;
+  bool success;
+};

@@ -8,8 +8,9 @@ class character
 {
 public:
   std::string name, texturePath, currentAction;
-  int hp, baseSpeed, baseAttack, accuracy, stamina, defence, speed, attack, player;
-  bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen;
+  int hp, baseSpeed, baseAttack, accuracy, stamina, defence, speed, attack, player, startPlace;
+  sf::Vector2f currentPosition;
+  bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen, animating;
   sf::Sprite sprite;
   sf::Texture texture;
 
@@ -29,7 +30,6 @@ public:
     isBot = initBot;
     actionChosen = initActionChosen;
     currentAction = initCurrentAction;
-
   }
 
   bool light_attack()
@@ -83,7 +83,7 @@ public:
       *dodgePtr = true;
       *speedPtr = baseSpeed + 35;
       *staminaPtr -= 2;
-      *currentActionPtr = "Dodge and Counter";
+      *currentActionPtr = "Dodge";
       return true;
     }
     else
@@ -188,11 +188,57 @@ public:
     *counterPtr = false;
     *actionChosenPtr = false;
     *currentActionPtr = "";
+
+    // Reset start positions
+    float x;
+    switch (startPlace)
+    {
+    case 0:
+      x = 400;
+      break;
+    case 1:
+      x = 1000;
+    }
+    sprite.setPosition(sf::Vector2f(x, 500.f));
+  }
+
+  void exitState()
+  {
+    bool *actionChosenPtr = &actionChosen;
+    bool *animatingPtr = &animating;
+    *actionChosenPtr = true;
+    *animatingPtr = false;
   }
 
   void increaseStamina()
   {
     int *staminaPtr = &stamina;
     stamina += 1;
+  }
+
+  void animateCharacter(actionTracker tracker, sf::Sprite opponentSprite)
+  {
+    sf::Vector2f *currentPositionPtr = &currentPosition;
+    bool *animatingPtr = &animating;
+    float shiftX;
+    *currentPositionPtr = sprite.getPosition();
+
+    switch (startPlace)
+    {
+    case 0:
+      shiftX = 2;
+      break;
+    case 1:
+      shiftX = -2;
+    }
+
+    if (tracker.action == "Light Attack")
+    {
+      sprite.move(shiftX, 0);
+      if (sprite.getGlobalBounds().intersects(opponentSprite.getGlobalBounds()))
+      {
+        *animatingPtr = false;
+      }
+    }
   }
 };
