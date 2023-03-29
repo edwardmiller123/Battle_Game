@@ -37,6 +37,7 @@ public:
     int *attackPtr = &attack;
     int *speedPtr = &speed;
     int *staminaPtr = &stamina;
+    bool *actionChosenPtr = &actionChosen;
     std::string *currentActionPtr = &currentAction;
     if (stamina > 3)
     {
@@ -44,10 +45,12 @@ public:
       *speedPtr = baseSpeed + 15;
       *staminaPtr -= 3;
       *currentActionPtr = "Light Attack";
+      *actionChosenPtr = true;
       return true;
     }
     else
     {
+      *actionChosenPtr = false;
       return false;
     }
   }
@@ -57,6 +60,7 @@ public:
     int *attackPtr = &attack;
     int *speedPtr = &speed;
     int *staminaPtr = &stamina;
+    bool *actionChosenPtr = &actionChosen;
     std::string *currentActionPtr = &currentAction;
     if (stamina > 5)
     {
@@ -64,10 +68,12 @@ public:
       *speedPtr = baseSpeed - 20;
       *staminaPtr -= 5;
       *currentActionPtr = "Heavy Attack";
+      *actionChosenPtr = true;
       return true;
     }
     else
     {
+      *actionChosenPtr = false;
       return false;
     }
   }
@@ -77,6 +83,7 @@ public:
     bool *dodgePtr = &preparingToDodge;
     int *speedPtr = &speed;
     int *staminaPtr = &stamina;
+    bool *actionChosenPtr = &actionChosen;
     std::string *currentActionPtr = &currentAction;
     if (stamina > 2)
     {
@@ -84,10 +91,12 @@ public:
       *speedPtr = baseSpeed + 35;
       *staminaPtr -= 2;
       *currentActionPtr = "Dodge";
+      *actionChosenPtr = true;
       return true;
     }
     else
     {
+      *actionChosenPtr = true;
       return false;
     }
   }
@@ -96,8 +105,10 @@ public:
   {
     std::string *currentActionPtr = &currentAction;
     bool *guardPtr = &guarding;
+    bool *actionChosenPtr = &actionChosen;
     *guardPtr = true;
     *currentActionPtr = "Guard";
+    *actionChosenPtr = true;
   }
 
   std::string receiveCounterAttack(character attacker)

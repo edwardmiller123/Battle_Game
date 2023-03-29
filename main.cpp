@@ -16,7 +16,6 @@ int main()
   bool victory = false;
   bool player2Bot = false;
   bool menu = true;
-  bool endTurn;
   std::vector<character> combatants, characters;
   std::vector<std::string> players;
   std::string outcome;
@@ -291,7 +290,6 @@ int main()
             enoughStamina = combatants[i].light_attack();
             if (enoughStamina)
             {
-              combatants[i].actionChosen = true;
               break;
             }
             else
@@ -303,7 +301,6 @@ int main()
             enoughStamina = combatants[i].heavy_attack();
             if (enoughStamina)
             {
-              combatants[i].actionChosen = true;
               break;
             }
             else
@@ -315,7 +312,6 @@ int main()
             enoughStamina = combatants[i].dodge();
             if (enoughStamina)
             {
-              combatants[i].actionChosen = true;
               break;
             }
             else
@@ -326,7 +322,6 @@ int main()
 
           case 4:
             combatants[i].guard();
-            combatants[i].actionChosen = true;
             break;
           default:
             break;
@@ -387,7 +382,7 @@ int main()
       }
       // Actions are applied. Whoever has the highest
       // speed goes first.
-      if (combatants[0].actionChosen && combatants[1].actionChosen && !endTurn)
+      if (combatants[0].actionChosen && combatants[1].actionChosen)
       {
         struct actionTracker tracker;
         if (combatants[0].speed > combatants[1].speed)
@@ -474,19 +469,15 @@ int main()
             }
           }
         }
-        endTurn = true;
       }
 
       // Reset the action dependant stats after every turn
       // and regain stamina.
-      if (endTurn)
+
+      for (int n = 0; n < 2; n++)
       {
-        for (int n = 0; n < 2; n++)
-        {
-          combatants[n].resetTempStats();
-          combatants[n].increaseStamina();
-        }
-        endTurn = false;
+        combatants[n].resetTempStats();
+        combatants[n].increaseStamina();
       }
 
       for (int m = 0; m < 2; m++)
