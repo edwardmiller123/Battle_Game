@@ -7,16 +7,16 @@
 class character
 {
 public:
-  std::string name, texturePath, currentAction;
+  std::string name, texturePath, currentAction, testTexturePathR;
   int hp, baseSpeed, baseAttack, accuracy, stamina, defence, speed, attack, player, startPlace;
   sf::Vector2f currentPosition;
   bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen, animating, doingAction;
   sf::Sprite sprite;
-  sf::Texture texture;
+  sf::Texture texture, testTextureR;
 
   void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, std::string newTexturePath,
-                     bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false,
-                     std::string initCurrentAction = "")
+                     std::string newTestTexturePathR = "assets/blue.png", bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false,
+                     bool initActionChosen = false, std::string initCurrentAction = "")
   {
     name = newName;
     hp = newHp;
@@ -26,6 +26,7 @@ public:
     accuracy = newAccuracy;
     stamina = newStamina;
     texturePath = newTexturePath;
+    testTexturePathR = newTestTexturePathR;
     guarding = initGuard;
     preparingToDodge = initDodge;
     prepCounterAttack = initCounterAttack;
@@ -257,6 +258,11 @@ public:
       // Place holders for now. Maybe make a switch later.
       if (tracker.action == "Light Attack")
       {
+        if (startPlace == 0)
+        {
+          // Remove once sprite sheet is done.
+          sprite.setTexture(testTextureR);
+        }
         std::cout << "light attack\n";
       }
       else if (tracker.action == "Heavy Attack")
@@ -265,7 +271,11 @@ public:
       }
       else if (tracker.action == "Dodge")
       {
-        sprite.move(-shiftX, 0);
+        // To prevent from dodging off the screen.
+        if (currentPosition.x < 1400.f && currentPosition.x > 200.f)
+        {
+          sprite.move(-shiftX, 0);
+        }
         std::cout << "dodge\n";
       }
       else if (tracker.action == "Guard")
@@ -279,6 +289,7 @@ public:
     }
     if (timeElapsed > sf::milliseconds(1500))
     {
+      sprite.setTexture(texture);
       *animatingPtr = false;
       *doingActionPtr = false;
     }

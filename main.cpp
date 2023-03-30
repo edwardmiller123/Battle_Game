@@ -197,6 +197,12 @@ int main()
         std::cout << "a character icon texture didnt load";
         return 0;
       };
+      // Remove once sprite sheet is done.
+      if (!combatants[l].testTextureR.loadFromFile(combatants[l].testTexturePathR))
+      {
+        std::cout << "a character attack texture didnt load";
+        return 0;
+      };
       combatants[l].sprite.setTexture(combatants[l].texture);
       float x;
       switch (l)
@@ -495,6 +501,7 @@ int main()
         {
           victory = true;
           window.close();
+          continue;
         }
       }
     }
