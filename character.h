@@ -13,7 +13,6 @@ public:
   bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen, animating, doingAction;
   sf::Sprite sprite;
   sf::Texture texture;
-  sf::Time animationDuration;
 
   void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, std::string newTexturePath,
                      bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false,
@@ -235,7 +234,6 @@ public:
     sf::Vector2f *currentPositionPtr = &currentPosition;
     bool *animatingPtr = &animating;
     bool *doingActionPtr = &doingAction;
-    sf::Time *animationDurationPtr = &animationDuration;
     float shiftX;
     *currentPositionPtr = sprite.getPosition();
 
@@ -244,10 +242,10 @@ public:
       switch (startPlace)
       {
       case 0:
-        shiftX = speed / 10;
+        shiftX = speed / 15;
         break;
       case 1:
-        shiftX = -(speed / 10);
+        shiftX = -(speed / 15);
       }
       sprite.move(shiftX, 0);
       if (sprite.getGlobalBounds().intersects(opponentSprite.getGlobalBounds()))
@@ -261,45 +259,29 @@ public:
       // Place holders for now. Maybe make a switch later.
       if (tracker.action == "Light Attack")
       {
-        if (timeElapsed > animationDuration + sf::milliseconds(50))
-        {
-          *animatingPtr = false;
-          *doingActionPtr = false;
-        }
+       std::cout << "light attack\n";
       }
       else if (tracker.action == "Heavy Attack")
       {
-        if (timeElapsed > animationDuration + sf::milliseconds(50))
-        {
-          *animatingPtr = false;
-          *doingActionPtr = false;
-        }
+        std::cout << "heavy attack\n";
       }
       else if (tracker.action == "Dodge")
       {
-        if (timeElapsed > animationDuration + sf::milliseconds(50))
-        {
-          *animatingPtr = false;
-          *doingActionPtr = false;
-        }
+        std::cout << "dodge\n";
       }
       else if (tracker.action == "Guard")
       {
-        if (timeElapsed > animationDuration + sf::milliseconds(50))
-        {
-          *animatingPtr = false;
-          *doingActionPtr = false;
-        }
+        std::cout << "guard\n";
       }
       else if (tracker.action == "Counter")
       {
-        if (timeElapsed > animationDuration + sf::milliseconds(50))
+        std::cout << "counter\n";
+      }
+    }
+    if (timeElapsed > sf::milliseconds(900))
         {
           *animatingPtr = false;
           *doingActionPtr = false;
         }
-      }
-    }
-    *animationDurationPtr = timeElapsed;
   }
 };

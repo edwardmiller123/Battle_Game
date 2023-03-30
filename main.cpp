@@ -447,9 +447,10 @@ int main()
               window.clear();
               window.draw(background);
               window.draw(infoText);
-              if (clock2.restart() > sf::milliseconds(5))
+              if (clock2.getElapsedTime() > sf::milliseconds(5))
               {
                 combatants[j].animateCharacter(actionRecord[k], opponentSprite, clock1.getElapsedTime());
+                clock2.restart();
               }
               window.draw(combatants[0].sprite);
               window.draw(combatants[1].sprite);
@@ -475,12 +476,13 @@ int main()
       }
       outcome = "";
 
-      // Reset the action dependant stats after every turn
-      // and regain stamina.
+      // Reset the action dependant stats, regain stamina
+      // and clear the actionRecord ready for next turn.
       for (int n = 0; n < 2; n++)
       {
         combatants[n].resetTempStats();
         combatants[n].increaseStamina();
+        actionRecord.clear();
       }
 
       for (int m = 0; m < 2; m++)
