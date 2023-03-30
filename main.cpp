@@ -12,6 +12,7 @@ int main()
   bool victory = false;
   bool player2Bot = false;
   bool menu = true;
+  bool exitState;
   std::vector<character> combatants, characters;
   std::vector<std::string> players;
   std::string outcome;
@@ -335,7 +336,7 @@ int main()
               menu = false;
               for (int j = 0; j < 2; j++)
               {
-                combatants[j].exitState();
+                exitState = combatants[j].exitState();
               }
               window.close();
               break;
@@ -418,63 +419,66 @@ int main()
 
       // Character animations
       sf::Sprite opponentSprite;
-      for (int k = 0; k < actionRecord.size(); k++)
+      if (!exitState)
       {
-        infoText.setString(actionRecord[k].outcomeString);
-        for (int j = 0; j < combatants.size(); j++)
+        for (int k = 0; k < actionRecord.size(); k++)
         {
-          if (combatants[j].player == actionRecord[k].player)
+          infoText.setString(actionRecord[k].outcomeString);
+          for (int j = 0; j < combatants.size(); j++)
           {
-            combatants[j].animating = true;
-
-            // Locate opponent sprite
-            for (int m = 0; m < 2; m++)
+            if (combatants[j].player == actionRecord[k].player)
             {
-              if (combatants[j].player != combatants[m].player)
-              {
-                opponentSprite = combatants[m].sprite;
-              }
-            }
+              combatants[j].animating = true;
 
-            // Total time elapsed
-            sf::Clock clock1;
-            clock1.restart();
-            // Time since last animation
-            sf::Clock clock2;
-            clock2.restart();
-            while (combatants[j].animating)
-            {
-              window.clear();
-              window.draw(background);
-              window.draw(infoText);
-              if (clock2.getElapsedTime() > sf::milliseconds(5))
+              // Locate opponent sprite
+              for (int m = 0; m < 2; m++)
               {
-                combatants[j].animateCharacter(actionRecord[k], opponentSprite, clock1.getElapsedTime());
-                clock2.restart();
-              }
-              window.draw(combatants[0].sprite);
-              window.draw(combatants[1].sprite);
-              window.display();
-              while (window.pollEvent(event))
-              {
-                switch (event.type)
+                if (combatants[j].player != combatants[m].player)
                 {
-                case sf::Event::Closed:
-                  victory = true;
-                  menu = false;
-                  for (int i = 0; i < 2; i++)
+                  opponentSprite = combatants[m].sprite;
+                }
+              }
+
+              // Total time elapsed
+              sf::Clock clock1;
+              clock1.restart();
+              // Time since last animation
+              sf::Clock clock2;
+              clock2.restart();
+              while (combatants[j].animating)
+              {
+                window.clear();
+                window.draw(background);
+                window.draw(infoText);
+                if (clock2.getElapsedTime() > sf::milliseconds(5))
+                {
+                  combatants[j].animateCharacter(actionRecord[k], opponentSprite, clock1.getElapsedTime());
+                  clock2.restart();
+                }
+                window.draw(combatants[0].sprite);
+                window.draw(combatants[1].sprite);
+                window.display();
+                while (window.pollEvent(event))
+                {
+                  switch (event.type)
                   {
-                    combatants[i].exitState();
+                  case sf::Event::Closed:
+                    victory = true;
+                    menu = false;
+                    for (int i = 0; i < 2; i++)
+                    {
+                      exitState = combatants[i].exitState();
+                    }
+                    window.close();
+                    break;
                   }
-                  window.close();
-                  break;
                 }
               }
             }
           }
         }
+        outcome = "";
       }
-      outcome = "";
 
       // Reset the action dependant stats, regain stamina
       // and clear the actionRecord ready for next turn.

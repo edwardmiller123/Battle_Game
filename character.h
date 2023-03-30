@@ -215,12 +215,13 @@ public:
     sprite.setPosition(sf::Vector2f(x, 500.f));
   }
 
-  void exitState()
+  bool exitState()
   {
     bool *actionChosenPtr = &actionChosen;
     bool *animatingPtr = &animating;
     *actionChosenPtr = true;
     *animatingPtr = false;
+    return true;
   }
 
   void increaseStamina()
