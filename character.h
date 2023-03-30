@@ -132,8 +132,7 @@ public:
 
   std::string applyAction(character attacker)
   {
-    std::stringstream stream;
-    std::string eventDescription, damageTakenStr;
+    std::string eventDescription;
     bool *dodgePtr = &preparingToDodge;
     bool *guardPtr = &guarding;
     bool *counterAttackPtr = &prepCounterAttack;
@@ -166,15 +165,12 @@ public:
     }
     if (!preparingToDodge && !guarding)
     {
-      if (attacker.attack)
+      if (attacker.attack > 0)
       {
         if (actionSucceeds(attacker.accuracy))
         {
           *hpPtr = hp - attacker.attack;
-
-          stream << attacker.attack;
-          stream >> damageTakenStr;
-          eventDescription += "\n" + attacker.name + " hit " + name + " for " + damageTakenStr + " Hp.\n";
+          eventDescription += "\n" + attacker.name + " hit " + name + " for " + std::to_string(attacker.attack) + " Hp.\n";
         }
         else
         {
