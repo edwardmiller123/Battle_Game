@@ -380,7 +380,7 @@ int main()
       }
       // Actions are applied. Whoever has the highest
       // speed goes first.
-      // To make clear: attacker applys action to attacked as such
+      // To clarify: attacker applys action to attacked as such
       // attacked.applyAction(attacker)
       actionTracker tracker;
       if (combatants[0].speed > combatants[1].speed)

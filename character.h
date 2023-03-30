@@ -237,16 +237,17 @@ public:
     float shiftX;
     *currentPositionPtr = sprite.getPosition();
 
+    switch (startPlace)
+    {
+    case 0:
+      shiftX = speed / 20;
+      break;
+    case 1:
+      shiftX = -(speed / 20);
+    }
+
     if (!doingAction)
     {
-      switch (startPlace)
-      {
-      case 0:
-        shiftX = speed / 15;
-        break;
-      case 1:
-        shiftX = -(speed / 15);
-      }
       sprite.move(shiftX, 0);
       if (sprite.getGlobalBounds().intersects(opponentSprite.getGlobalBounds()))
       {
@@ -259,7 +260,7 @@ public:
       // Place holders for now. Maybe make a switch later.
       if (tracker.action == "Light Attack")
       {
-       std::cout << "light attack\n";
+        std::cout << "light attack\n";
       }
       else if (tracker.action == "Heavy Attack")
       {
@@ -267,6 +268,7 @@ public:
       }
       else if (tracker.action == "Dodge")
       {
+        sprite.move(-shiftX, 0);
         std::cout << "dodge\n";
       }
       else if (tracker.action == "Guard")
@@ -278,10 +280,10 @@ public:
         std::cout << "counter\n";
       }
     }
-    if (timeElapsed > sf::milliseconds(900))
-        {
-          *animatingPtr = false;
-          *doingActionPtr = false;
-        }
+    if (timeElapsed > sf::milliseconds(1500))
+    {
+      *animatingPtr = false;
+      *doingActionPtr = false;
+    }
   }
 };
