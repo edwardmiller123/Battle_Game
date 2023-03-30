@@ -6,10 +6,6 @@
 #include "actionCard.h"
 #include "characters.h"
 
-// To compile:
-//  g++ -I C:\Users\edwar\Documents\codeProjects\C++\SFML-2.5.1\include -c main.cpp -o main.o
-//  g++ -L C:\Users\edwar\Documents\codeProjects\C++\SFML-2.5.1\lib .\main.o -o game.exe -lmingw32 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-main -mwindows
-
 int main()
 {
   bool enoughStamina;
@@ -20,7 +16,6 @@ int main()
   std::vector<std::string> players;
   std::string outcome;
   int action;
-  int animationCounter = 0;
   int player = 1;
   std::string displayString;
   std::vector<actionCard> actionCards;
@@ -146,6 +141,7 @@ int main()
       {
         if (players[j] == characters[i].name)
         {
+          characters[i].player = j + 1;
           combatants.push_back(characters[i]);
         }
       }
@@ -337,8 +333,10 @@ int main()
             case sf::Event::Closed:
               victory = true;
               menu = false;
-              combatants[0].actionChosen = true;
-              combatants[1].actionChosen = true;
+              for (int j = 0; j < 2; j++)
+              {
+                combatants[j].exitState();
+              }
               window.close();
               break;
             case sf::Event::MouseButtonPressed:
@@ -382,75 +380,80 @@ int main()
       }
       // Actions are applied. Whoever has the highest
       // speed goes first.
-      if (combatants[0].actionChosen && combatants[1].actionChosen)
+      // To make clear: attacker applys action to attacked as such
+      // attacked.applyAction(attacker)
+      actionTracker tracker;
+      if (combatants[0].speed > combatants[1].speed)
       {
-        struct actionTracker tracker;
-        if (combatants[0].speed > combatants[1].speed)
-        {
-          for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
-          {
-            outcome = combatants[n].applyAction(combatants[m]);
-            tracker.name = combatants[n].name;
-            tracker.action = combatants[n].currentAction;
-            actionRecord.push_back(tracker);
-          }
-        }
-        else
-        {
-          for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
-          {
-            outcome = combatants[m].applyAction(combatants[n]);
-            tracker.name = combatants[n].name;
-            tracker.action = combatants[n].currentAction;
-            actionRecord.push_back(tracker);
-          }
-        }
-
-        // Counter attacks are applied if there are any.
         for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
         {
-          if (combatants[m].prepCounterAttack)
-          {
-            outcome += combatants[n].receiveCounterAttack(combatants[m]);
-            tracker.name = combatants[m].name;
-            tracker.action = "counter";
-            actionRecord.push_back(tracker);
-          }
+          tracker.outcomeString = combatants[n].applyAction(combatants[m]);
+          tracker.player = combatants[m].player;
+          tracker.action = combatants[m].currentAction;
+          actionRecord.push_back(tracker);
+        }
+      }
+      else
+      {
+        for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
+        {
+          tracker.outcomeString = combatants[m].applyAction(combatants[n]);
+          tracker.player = combatants[n].player;
+          tracker.action = combatants[n].currentAction;
+          actionRecord.push_back(tracker);
+        }
+      }
+
+      // Counter attacks are applied if there are any.
+      for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)
+      {
+        if (combatants[m].prepCounterAttack)
+        {
+          tracker.outcomeString = combatants[n].receiveCounterAttack(combatants[m]);
+          tracker.player = combatants[m].player;
+          tracker.action = "Counter";
+          actionRecord.push_back(tracker);
         }
       }
 
       // Character animations
-      infoText.setString(outcome);
-      int animationFrame = 0;
       sf::Sprite opponentSprite;
       for (int k = 0; k < actionRecord.size(); k++)
       {
+        infoText.setString(actionRecord[k].outcomeString);
         for (int j = 0; j < combatants.size(); j++)
         {
-          if (combatants[j].name == actionRecord[k].name)
+          if (combatants[j].player == actionRecord[k].player)
           {
             combatants[j].animating = true;
 
             // Locate opponent sprite
-
             for (int m = 0; m < 2; m++)
             {
-              if (combatants[j].name != combatants[m].name)
+              if (combatants[j].player != combatants[m].player)
               {
                 opponentSprite = combatants[m].sprite;
               }
             }
 
+            // Total time elapsed
+            sf::Clock clock1;
+            clock1.restart();
+            // Time since last animation
+            sf::Clock clock2;
+            clock2.restart();
             while (combatants[j].animating)
             {
               window.clear();
               window.draw(background);
               window.draw(infoText);
-              combatants[j].animateCharacter(actionRecord[k], opponentSprite);
+              if (clock2.restart() > sf::milliseconds(5))
+              {
+                combatants[j].animateCharacter(actionRecord[k], opponentSprite, clock1.getElapsedTime());
+              }
               window.draw(combatants[0].sprite);
               window.draw(combatants[1].sprite);
               window.display();
-              animationFrame++;
               while (window.pollEvent(event))
               {
                 switch (event.type)
@@ -470,10 +473,10 @@ int main()
           }
         }
       }
+      outcome = "";
 
       // Reset the action dependant stats after every turn
       // and regain stamina.
-
       for (int n = 0; n < 2; n++)
       {
         combatants[n].resetTempStats();

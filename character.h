@@ -10,11 +10,14 @@ public:
   std::string name, texturePath, currentAction;
   int hp, baseSpeed, baseAttack, accuracy, stamina, defence, speed, attack, player, startPlace;
   sf::Vector2f currentPosition;
-  bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen, animating;
+  bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen, animating, doingAction;
   sf::Sprite sprite;
   sf::Texture texture;
+  sf::Time animationDuration;
 
-  void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, std::string newTexturePath, bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false, std::string initCurrentAction = "")
+  void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, std::string newTexturePath,
+                     bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false,
+                     std::string initCurrentAction = "")
   {
     name = newName;
     hp = newHp;
@@ -224,32 +227,79 @@ public:
   void increaseStamina()
   {
     int *staminaPtr = &stamina;
-    stamina += 1;
+    *staminaPtr += 1;
   }
 
-  void animateCharacter(actionTracker tracker, sf::Sprite opponentSprite)
+  void animateCharacter(actionTracker tracker, sf::Sprite opponentSprite, sf::Time timeElapsed)
   {
     sf::Vector2f *currentPositionPtr = &currentPosition;
     bool *animatingPtr = &animating;
+    bool *doingActionPtr = &doingAction;
+    sf::Time *animationDurationPtr = &animationDuration;
     float shiftX;
     *currentPositionPtr = sprite.getPosition();
 
-    switch (startPlace)
+    if (!doingAction)
     {
-    case 0:
-      shiftX = 2;
-      break;
-    case 1:
-      shiftX = -2;
-    }
-
-    if (tracker.action == "Light Attack")
-    {
+      switch (startPlace)
+      {
+      case 0:
+        shiftX = speed / 10;
+        break;
+      case 1:
+        shiftX = -(speed / 10);
+      }
       sprite.move(shiftX, 0);
       if (sprite.getGlobalBounds().intersects(opponentSprite.getGlobalBounds()))
       {
-        *animatingPtr = false;
+        *doingActionPtr = true;
       }
     }
+
+    if (doingAction)
+    {
+      // Place holders for now. Maybe make a switch later.
+      if (tracker.action == "Light Attack")
+      {
+        if (timeElapsed > animationDuration + sf::milliseconds(50))
+        {
+          *animatingPtr = false;
+          *doingActionPtr = false;
+        }
+      }
+      else if (tracker.action == "Heavy Attack")
+      {
+        if (timeElapsed > animationDuration + sf::milliseconds(50))
+        {
+          *animatingPtr = false;
+          *doingActionPtr = false;
+        }
+      }
+      else if (tracker.action == "Dodge")
+      {
+        if (timeElapsed > animationDuration + sf::milliseconds(50))
+        {
+          *animatingPtr = false;
+          *doingActionPtr = false;
+        }
+      }
+      else if (tracker.action == "Guard")
+      {
+        if (timeElapsed > animationDuration + sf::milliseconds(50))
+        {
+          *animatingPtr = false;
+          *doingActionPtr = false;
+        }
+      }
+      else if (tracker.action == "Counter")
+      {
+        if (timeElapsed > animationDuration + sf::milliseconds(50))
+        {
+          *animatingPtr = false;
+          *doingActionPtr = false;
+        }
+      }
+    }
+    *animationDurationPtr = timeElapsed;
   }
 };

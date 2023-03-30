@@ -39,6 +39,6 @@ int bot(int section)
 
 struct actionTracker
 {
-  std::string name, action, player;
-  bool success;
+  std::string action, outcomeString;
+  int player;
 };
