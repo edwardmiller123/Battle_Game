@@ -20,6 +20,7 @@ int main()
   int player = 1;
   std::string displayString;
   std::vector<actionCard> actionCards;
+  actionTracker tracker;
   std::vector<struct actionTracker> actionRecord;
 
   sf::RenderWindow window(sf::VideoMode(1600, 800), "Battle Game");
@@ -77,10 +78,12 @@ int main()
           return 0;
         };
         characters[i].sprite.setTexture(characters[i].texture);
+        characters[i].sprite.setTextureRect(characters[i].defaultRectR);
         characters[i].sprite.scale(sf::Vector2f(0.25, 0.25));
-        characters[i].sprite.setPosition(sf::Vector2f(i * 200 + 275.f, 475.f));
+        characters[i].sprite.setPosition(sf::Vector2f(i * 250 + 300.f, 475.f));
         window.draw(characters[i].sprite);
       }
+
       if (player == 2)
       {
         window.draw(botSprite);
@@ -194,13 +197,7 @@ int main()
     {
       if (!combatants[l].texture.loadFromFile(combatants[l].texturePath))
       {
-        std::cout << "a character icon texture didnt load";
-        return 0;
-      };
-      // Remove once sprite sheet is done.
-      if (!combatants[l].testTextureR.loadFromFile(combatants[l].testTexturePathR))
-      {
-        std::cout << "a character attack texture didnt load";
+        std::cout << "character sheet " << l << " didnt load\n";
         return 0;
       };
       combatants[l].sprite.setTexture(combatants[l].texture);
@@ -209,9 +206,11 @@ int main()
       {
       case 0:
         x = 400;
+        combatants[l].sprite.setTextureRect(combatants[l].defaultRectL);
         break;
       case 1:
         x = 1000;
+        combatants[l].sprite.setTextureRect(combatants[l].defaultRectR);
         break;
       };
       // Keeps track of which side the character starts on as a 0 or 1.
@@ -387,9 +386,8 @@ int main()
       }
       // Actions are applied. Whoever has the highest
       // speed goes first.
-      // To clarify: attacker applys action to attacked as such
-      // attacked.applyAction(attacker)
-      actionTracker tracker;
+      // To clarify: attacker applys action to target as such
+      // target.applyAction(attacker)
       if (combatants[0].speed > combatants[1].speed)
       {
         for (int m = 0, n = 1; m <= 1, n >= 0; m++, n--)

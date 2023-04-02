@@ -12,21 +12,33 @@ public:
   sf::Vector2f currentPosition;
   bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen, animating, doingAction;
   sf::Sprite sprite;
-  sf::Texture texture, testTextureR;
+  sf::Texture texture;
+  sf::Rect<int> defaultRectR, defaultRectL, lightAttackRectR, lightAttackRectL, heavyAttackRectR, heavyAttackRectL, guardRectR, guardRectL;
 
-  void new_character(std::string newName, int newHp, int newSpeed, int newAttack, int newDefence, int newAccuracy, int newStamina, std::string newTexturePath,
-                     std::string newTestTexturePathR = "assets/blue.png", bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false,
-                     bool initActionChosen = false, std::string initCurrentAction = "")
+  void new_character(std::string newName, int newHp, int newBaseSpeed, int newBaseAttack, int newDefence, int newAccuracy, int newStamina, std::string newTexturePath,
+                     sf::Rect<int> newDefaultRectR, sf::Rect<int> newDefaultRectL, sf::Rect<int> newLightAttackRectR, sf::Rect<int> newLightAttackRectL,
+                     sf::Rect<int> newHeavyAttackRectR, sf::Rect<int> newHeavyAttackRectL, sf::Rect<int> newGuardRectR, sf::Rect<int> newGuardRectL,
+                     bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false,
+                     std::string initCurrentAction = "", int newAttack = 0, int newSpeed = 0)
   {
     name = newName;
     hp = newHp;
-    baseSpeed = newSpeed;
-    baseAttack = newAttack;
+    baseSpeed = newBaseSpeed;
+    baseAttack = newBaseAttack;
+    speed = newSpeed;
+    attack = newAttack;
     defence = newDefence;
     accuracy = newAccuracy;
     stamina = newStamina;
     texturePath = newTexturePath;
-    testTexturePathR = newTestTexturePathR;
+    defaultRectR = newDefaultRectR;
+    defaultRectL = newDefaultRectL;
+    lightAttackRectR = newLightAttackRectR;
+    lightAttackRectL = newLightAttackRectL;
+    heavyAttackRectR = newHeavyAttackRectR;
+    heavyAttackRectL = newHeavyAttackRectL;
+    guardRectR = newGuardRectR;
+    guardRectL = newGuardRectL;
     guarding = initGuard;
     preparingToDodge = initDodge;
     prepCounterAttack = initCounterAttack;
@@ -255,19 +267,29 @@ public:
 
     if (doingAction)
     {
-      // Place holders for now. Maybe make a switch later.
-      if (tracker.action == "Light Attack")
+      if (tracker.action == "Light Attack" || tracker.action == "Counter")
       {
-        if (startPlace == 0)
+        switch (startPlace)
         {
-          // Remove once sprite sheet is done.
-          sprite.setTexture(testTextureR);
+        case 0:
+          sprite.setTextureRect(lightAttackRectL);
+          break;
+        case 1:
+          sprite.setTextureRect(lightAttackRectR);
+          break;
         }
-        std::cout << "light attack\n";
       }
       else if (tracker.action == "Heavy Attack")
       {
-        std::cout << "heavy attack\n";
+        switch (startPlace)
+        {
+        case 0:
+          sprite.setTextureRect(heavyAttackRectL);
+          break;
+        case 1:
+          sprite.setTextureRect(heavyAttackRectR);
+          break;
+        }
       }
       else if (tracker.action == "Dodge")
       {
@@ -276,20 +298,31 @@ public:
         {
           sprite.move(-shiftX, 0);
         }
-        std::cout << "dodge\n";
       }
       else if (tracker.action == "Guard")
       {
-        std::cout << "guard\n";
-      }
-      else if (tracker.action == "Counter")
-      {
-        std::cout << "counter\n";
+        switch (startPlace)
+        {
+        case 0:
+          sprite.setTextureRect(guardRectL);
+          break;
+        case 1:
+          sprite.setTextureRect(guardRectR);
+          break;
+        }
       }
     }
-    if (timeElapsed > sf::milliseconds(1500))
+    if (timeElapsed > sf::milliseconds(3000))
     {
-      sprite.setTexture(texture);
+      switch (startPlace)
+        {
+        case 0:
+          sprite.setTextureRect(defaultRectL);
+          break;
+        case 1:
+          sprite.setTextureRect(defaultRectR);
+          break;
+        }
       *animatingPtr = false;
       *doingActionPtr = false;
     }
