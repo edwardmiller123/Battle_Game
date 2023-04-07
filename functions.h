@@ -3,6 +3,12 @@
 #include <time.h>
 #include <SFML/Graphics.hpp>
 
+struct actionTracker
+{
+  std::string action, outcomeString;
+  int player;
+};
+
 bool actionSucceeds(int number)
 {
   srand(time(0));
@@ -47,8 +53,4 @@ void initText(sf::Text &text, sf::Font &font, int size, sf::Color fillColour, sf
   text.setPosition(position);
 }
 
-struct actionTracker
-{
-  std::string action, outcomeString;
-  int player;
-};
+
