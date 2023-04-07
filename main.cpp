@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "actionCard.h"
-#include "characters.h"
+#include "gameParts.h"
 
 int main()
 {
