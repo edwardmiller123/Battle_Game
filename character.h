@@ -47,6 +47,16 @@ public:
     currentAction = initCurrentAction;
   }
 
+  std::string displayStats()
+  {
+    return "HP: " + std::to_string(hp) + "\n" +
+           "Atk: " + std::to_string(baseAttack) + "\n" +
+           "Def: " + std::to_string(defence) + "\n" +
+           "Sp: " + std::to_string(baseSpeed) + "\n" +
+           "Acc: " + std::to_string(accuracy) + "\n";
+    "Stm: " + std::to_string(stamina) + "\n";
+  }
+
   bool light_attack()
   {
     int *attackPtr = &attack;
@@ -103,7 +113,7 @@ public:
     if (stamina > 2)
     {
       *dodgePtr = true;
-      *speedPtr = baseSpeed + 35;
+      *speedPtr = baseSpeed + 15;
       *staminaPtr -= 2;
       *currentActionPtr = "Dodge";
       *actionChosenPtr = true;
@@ -134,7 +144,7 @@ public:
     if (actionSucceeds(attacker.speed) && actionSucceeds(attacker.accuracy))
     {
       *hpPtr = hp - damage;
-      outcome = attacker.name + " successfully counter attacked." + "\n";
+      outcome = attacker.name + " successfully counter attacked.\n";
     }
     else
     {
@@ -143,7 +153,8 @@ public:
     return outcome;
   }
 
-  std::string applyAction(character attacker)
+  std::string
+  applyAction(character attacker)
   {
     std::string eventDescription;
     bool *dodgePtr = &preparingToDodge;
@@ -155,7 +166,14 @@ public:
     {
       if (actionSucceeds(speed))
       {
-        eventDescription = "\n" + name + " evaded " + attacker.name + "\'s attack.\n";
+        if (!attacker.preparingToDodge)
+        {
+          eventDescription = "\n" + name + " evaded " + attacker.name + "\'s attack.\n";
+        }
+        else
+        {
+          eventDescription = "\n" + name + " dodged.\n";
+        }
         *counterAttackPtr = true;
       }
       else
@@ -217,9 +235,11 @@ public:
     {
     case 0:
       x = 400;
+      sprite.setTextureRect(defaultRectL);
       break;
     case 1:
       x = 1000;
+      sprite.setTextureRect(defaultRectR);
     }
     sprite.setPosition(sf::Vector2f(x, 500.f));
   }
@@ -314,15 +334,6 @@ public:
     }
     if (timeElapsed > sf::milliseconds(3000))
     {
-      switch (startPlace)
-        {
-        case 0:
-          sprite.setTextureRect(defaultRectL);
-          break;
-        case 1:
-          sprite.setTextureRect(defaultRectR);
-          break;
-        }
       *animatingPtr = false;
       *doingActionPtr = false;
     }

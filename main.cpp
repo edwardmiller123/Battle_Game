@@ -12,7 +12,7 @@ int main()
   bool victory = false;
   bool player2Bot = false;
   bool menu = true;
-  bool exitState;
+  bool exitState, showCharacterStats;
   std::vector<character> combatants, characters;
   std::vector<std::string> players;
   std::string outcome;
@@ -58,7 +58,6 @@ int main()
   text.setOutlineColor(sf::Color::Black);
   text.setOutlineThickness(4);
   text.setFillColor(sf::Color::Magenta);
-  text.setPosition(sf::Vector2f(350.f, 200.f));
 
   // Start Game loop.
   while (window.isOpen())
@@ -66,6 +65,7 @@ int main()
     // Start Character selection menu.
     while (menu)
     {
+
       // Draw character icons on the menu.
       characters = initCharacters();
       window.clear();
@@ -90,12 +90,10 @@ int main()
       }
 
       displayString = "Player " + std::to_string(player) + " Choose your character:\n";
-      text.setString(displayString);
-      window.draw(text);
 
       while (window.pollEvent(event))
       {
-
+        sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         switch (event.type)
         {
         case sf::Event::Closed:
@@ -105,8 +103,6 @@ int main()
         case sf::Event::MouseButtonPressed:
           if (event.mouseButton.button == sf::Mouse::Left)
           {
-            sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
             for (int j = 0; j < characters.size(); j++)
             {
 
@@ -124,12 +120,27 @@ int main()
             }
           }
           break;
-
+        case sf::Event::MouseMoved:
+          showCharacterStats = false;
+          for (int m = 0; m < characters.size(); m++)
+          {
+            if (characters[m].sprite.getGlobalBounds().contains(mousePosition))
+            {
+              text.setPosition(sf::Vector2f(650.f, 100.f));
+              text.setString(characters[m].displayStats());
+              showCharacterStats = true;
+            }
+          }
+          if (!showCharacterStats)
+          {
+            text.setString(displayString);
+            text.setPosition(sf::Vector2f(350.f, 200.f));
+          }
         default:
           break;
         }
       }
-
+      window.draw(text);
       window.display();
 
       if (player == 3)
@@ -433,6 +444,7 @@ int main()
             if (combatants[j].player == actionRecord[k].player)
             {
               combatants[j].animating = true;
+              std::cout << actionRecord[k].player << " " << actionRecord[k].action << "\n";
 
               // Locate opponent sprite
               for (int m = 0; m < 2; m++)
