@@ -8,7 +8,7 @@ std::vector<character> initCharacters()
   character speedyMcSpeed, bigBoi, joe, veryBadCharacter;
   std::vector<character> characters;
 
-  // Fix speedys sprite sheet.
+  // TODO: Fix speedys sprite sheet.
   speedyMcSpeed.new_character("SpeedyMcSpeed", 60, 85, 10, 50, 90, 30, "assets/speedy_sheet.png",
                               {2097, 1377, 769, 833}, {1299, 209, 757, 873}, {0, 0, 0, 0}, {0, 0, 0, 0},
                               {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0});

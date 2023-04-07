@@ -277,10 +277,10 @@ public:
     switch (startPlace)
     {
     case 0:
-      shiftX = speed / 20;
+      shiftX = baseSpeed / 15;
       break;
     case 1:
-      shiftX = -(speed / 20);
+      shiftX = -(baseSpeed / 15);
     }
 
     if (!doingAction)

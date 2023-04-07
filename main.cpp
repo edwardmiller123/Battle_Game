@@ -450,6 +450,7 @@ int main()
                 if (combatants[j].player != combatants[m].player)
                 {
                   opponentSprite = combatants[m].sprite;
+                  break;
                 }
               }
 
