@@ -37,6 +37,16 @@ int bot(int section)
   return j + rand() % i;
 }
 
+void initText(sf::Text &text, sf::Font &font, int size, sf::Color fillColour, sf::Color outlineColour, int thickness, sf::Vector2f position)
+{
+  text.setFont(font);
+  text.setCharacterSize(size);
+  text.setFillColor(fillColour);
+  text.setOutlineColor(outlineColour);
+  text.setOutlineThickness(thickness);
+  text.setPosition(position);
+}
+
 struct actionTracker
 {
   std::string action, outcomeString;

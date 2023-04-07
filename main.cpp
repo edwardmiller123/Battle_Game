@@ -53,11 +53,8 @@ int main()
     std::cout << "Error loading font\n";
     return 0;
   }
-  text.setFont(font);
-  text.setCharacterSize(50);
-  text.setOutlineColor(sf::Color::Black);
-  text.setOutlineThickness(4);
-  text.setFillColor(sf::Color::Magenta);
+
+  initText(text, font, 50, sf::Color::Magenta, sf::Color::Black, 4, sf::Vector2f(350.f, 200.f));
 
   // Start Game loop.
   while (window.isOpen())
@@ -67,9 +64,9 @@ int main()
     {
 
       // Draw character icons on the menu.
-      characters = initCharacters();
       window.clear();
       window.draw(background);
+      characters = initCharacters();
       for (int i = 0; i < characters.size(); i++)
       {
         if (!characters[i].texture.loadFromFile(characters[i].texturePath))
@@ -169,26 +166,9 @@ int main()
 
     std::string infoTextString;
 
-    infoText.setFont(font);
-    infoText.setCharacterSize(30);
-    infoText.setFillColor(sf::Color::Magenta);
-    infoText.setOutlineColor(sf::Color::Black);
-    infoText.setOutlineThickness(4);
-    infoText.setPosition(sf::Vector2f(550.f, 100.f));
-
-    stats1.setFont(font);
-    stats1.setCharacterSize(25);
-    stats1.setFillColor(sf::Color::Magenta);
-    stats1.setOutlineColor(sf::Color::Black);
-    stats1.setOutlineThickness(4);
-    stats1.setPosition(sf::Vector2f(10.f, 0.f));
-
-    stats2.setFont(font);
-    stats2.setCharacterSize(25);
-    stats2.setFillColor(sf::Color::Magenta);
-    stats2.setOutlineColor(sf::Color::Black);
-    stats2.setOutlineThickness(4);
-    stats2.setPosition(sf::Vector2f(1390.f, 0.f));
+    initText(infoText, font, 30, sf::Color::Magenta, sf::Color::Black, 4, sf::Vector2f(550.f, 100.f));
+    initText(stats1, font, 25, sf::Color::Magenta, sf::Color::Black, 4, sf::Vector2f(10.f, 0.f));
+    initText(stats2, font, 25, sf::Color::Magenta, sf::Color::Black, 4, sf::Vector2f(1390.f, 0.f));
 
     actionCards = initActionCards();
     for (int n = 0; n < actionCards.size(); n++)
