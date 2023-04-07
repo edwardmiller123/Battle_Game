@@ -167,7 +167,7 @@ int main()
       combatants[1].isBot = true;
     }
 
-    std::string stats1String, stats2String, infoTextString;
+    std::string infoTextString;
 
     infoText.setFont(font);
     infoText.setCharacterSize(30);
@@ -247,10 +247,8 @@ int main()
     // Apply action Loop
     while (!victory)
     {
-      stats1String = combatants[0].name + " \n" + "HP: " + std::to_string(combatants[0].hp) + " \n" + "STM: " + std::to_string(combatants[0].stamina) + " \n" + combatants[0].currentAction + " \n";
-      stats1.setString(stats1String);
-      stats2String = combatants[1].name + " \n" + "HP: " + std::to_string(combatants[1].hp) + " \n" + "STM: " + std::to_string(combatants[1].stamina) + " \n" + combatants[1].currentAction + " \n";
-      stats2.setString(stats2String);
+      stats1.setString(combatants[0].displayCurrentStats());
+      stats2.setString(combatants[1].displayCurrentStats());
 
       for (int i = 0; i < 2; i++)
       {

@@ -57,6 +57,13 @@ public:
     "Stm: " + std::to_string(stamina) + "\n";
   }
 
+  std::string displayCurrentStats()
+  {
+    return name + " \n" + "HP: " + std::to_string(hp) + " \n" +
+           "STM: " + std::to_string(stamina) + " \n" +
+           currentAction + " \n";
+  }
+
   bool light_attack()
   {
     int *attackPtr = &attack;
