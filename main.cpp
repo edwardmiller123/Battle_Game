@@ -13,9 +13,7 @@ int main()
   bool player2Bot = false;
   bool menu = true;
   bool exitState, showCharacterStats;
-  std::vector<character> combatants, characters;
-  std::vector<std::string> players;
-  std::string outcome;
+  std::vector<character> combatants, characters, players;
   int action;
   int player = 1;
   std::string displayString;
@@ -105,14 +103,15 @@ int main()
 
               if (characters[j].sprite.getGlobalBounds().contains(mousePosition))
               {
-                players.push_back(characters[j].name);
+                players.push_back(characters[j]);
                 player++;
               }
             }
             if (botSprite.getGlobalBounds().contains(mousePosition) && player == 2)
             {
-              player2Bot = true;
-              players.push_back(characters[bot(1)].name);
+              // player2Bot = true;
+              players.push_back(characters[bot(1)]);
+              players[1].isBot = true;
               player++;
             }
           }
@@ -145,25 +144,10 @@ int main()
         menu = false;
       }
     }
+
     // Menu closes. Character choices are prepared for the game.
-
-    for (int j = 0; j < players.size(); j++)
-    {
-      for (int i = 0; i < characters.size(); i++)
-      {
-        if (players[j] == characters[i].name)
-        {
-          characters[i].player = j + 1;
-          combatants.push_back(characters[i]);
-        }
-      }
-    }
-
-    if (player2Bot)
-    {
-      combatants[1].isBot = true;
-    }
-
+    initCombatants(players, characters, combatants);
+   
     std::string infoTextString;
 
     initText(infoText, font, 30, sf::Color::Magenta, sf::Color::Black, 4, sf::Vector2f(550.f, 100.f));
@@ -275,50 +259,7 @@ int main()
             Sleep(2000);
           }
 
-          switch (action)
-          {
-          case 1:
-            enoughStamina = combatants[i].light_attack();
-            if (enoughStamina)
-            {
-              break;
-            }
-            else
-            {
-              infoTextString = "Not enough stamina\n";
-              break;
-            }
-          case 2:
-            enoughStamina = combatants[i].heavy_attack();
-            if (enoughStamina)
-            {
-              break;
-            }
-            else
-            {
-              infoTextString = "Not enough stamina\n";
-              break;
-            }
-          case 3:
-            enoughStamina = combatants[i].dodge();
-            if (enoughStamina)
-            {
-              break;
-            }
-            else
-            {
-              infoTextString = "Not enough stamina\n";
-              break;
-            }
-
-          case 4:
-            combatants[i].guard();
-            break;
-          default:
-            break;
-          }
-
-          action = 0;
+          chooseAction(action, enoughStamina, combatants[i], infoTextString);
 
           while (window.pollEvent(event))
           {
@@ -439,7 +380,6 @@ int main()
             }
           }
         }
-        outcome = "";
       }
 
       // Reset the action dependant stats, regain stamina
