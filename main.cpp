@@ -319,68 +319,7 @@ int main()
       applyActions(combatants, tracker, actionRecord);
 
       // Character animations
-      sf::Sprite opponentSprite;
-      if (!exitState)
-      {
-        for (int k = 0; k < actionRecord.size(); k++)
-        {
-          infoText.setString(actionRecord[k].outcomeString);
-          for (int j = 0; j < combatants.size(); j++)
-          {
-            if (combatants[j].player == actionRecord[k].player)
-            {
-              combatants[j].animating = true;
-              std::cout << actionRecord[k].player << " " << actionRecord[k].action << "\n";
-
-              // Locate opponent sprite
-              for (int m = 0; m < 2; m++)
-              {
-                if (combatants[j].player != combatants[m].player)
-                {
-                  opponentSprite = combatants[m].sprite;
-                  break;
-                }
-              }
-
-              // Total time elapsed
-              sf::Clock clock1;
-              clock1.restart();
-              // Time since last animation
-              sf::Clock clock2;
-              clock2.restart();
-              while (combatants[j].animating)
-              {
-                window.clear();
-                window.draw(background);
-                window.draw(infoText);
-                if (clock2.getElapsedTime() > sf::milliseconds(5))
-                {
-                  combatants[j].animateCharacter(actionRecord[k], opponentSprite, clock1.getElapsedTime());
-                  clock2.restart();
-                }
-                window.draw(combatants[0].sprite);
-                window.draw(combatants[1].sprite);
-                window.display();
-                while (window.pollEvent(event))
-                {
-                  switch (event.type)
-                  {
-                  case sf::Event::Closed:
-                    victory = true;
-                    menu = false;
-                    for (int i = 0; i < 2; i++)
-                    {
-                      exitState = combatants[i].exitState();
-                    }
-                    window.close();
-                    break;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+      animations(exitState, actionRecord, infoText, combatants, window, victory, menu, event, background);
 
       // Reset the action dependant stats, regain stamina
       // and clear the actionRecord ready for next turn.
