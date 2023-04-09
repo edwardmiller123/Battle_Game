@@ -77,7 +77,7 @@ int main()
 
       window.clear();
       window.draw(background);
-      
+
       // Draw character icons on the menu.
       for (int i = 0; i < characters.size(); i++)
       {
@@ -198,20 +198,10 @@ int main()
       combatants[l].sprite.setPosition(sf::Vector2f(x, 500.f));
     }
 
-    int counter = 0;
-    text.setCharacterSize(100);
-    text.setFillColor(sf::Color::White);
-    text.setPosition(sf::Vector2f(650.f, 225.f));
-    text.setString("\nBegin!\n");
     if (!victory && !menu)
     {
-      while (counter <= 500)
-      {
-        window.clear();
-        window.draw(text);
-        window.display();
-        counter++;
-      }
+      text.setString("\nBegin!\n");
+      messageScreen(text, font, sf::Vector2f(650.f, 225.f), sf::seconds(2), window);
     }
     // Apply action Loop
     while (!victory)
@@ -335,10 +325,21 @@ int main()
         if (combatants[m].hp <= 0)
         {
           victory = true;
-          window.close();
-          continue;
+          break;
         }
       }
+    }
+    for (int i = 0; i < 2; i++)
+    {
+      if (combatants[i].hasWon)
+      {
+        text.setString("Player " + std::to_string(combatants[i].player) + " wins!\n");
+      }
+    }
+    if (victory && !menu)
+    {
+      messageScreen(text, font, sf::Vector2f(400.f, 225.f), sf::seconds(3), window);
+      window.close();
     }
   }
   return 0;

@@ -79,6 +79,11 @@ void applyActions(std::vector<character> &combatants, actionTracker &tracker, st
       tracker.player = combatants[m].player;
       tracker.action = combatants[m].currentAction;
       actionRecord.push_back(tracker);
+      if (combatants[n].hp <= 0)
+      {
+        combatants[m].hasWon = true;
+        break;
+      }
     }
   }
   else
@@ -89,6 +94,11 @@ void applyActions(std::vector<character> &combatants, actionTracker &tracker, st
       tracker.player = combatants[n].player;
       tracker.action = combatants[n].currentAction;
       actionRecord.push_back(tracker);
+      if (combatants[m].hp <= 0)
+      {
+        combatants[n].hasWon = true;
+        break;
+      }
     }
   }
 
@@ -180,5 +190,17 @@ void reset(std::vector<character> &combatants, std::vector<actionTracker> &actio
     combatants[n].resetTempStats();
     combatants[n].increaseStamina();
     actionRecord.clear();
+  }
+}
+
+void messageScreen(sf::Text &text, sf::Font &font, sf::Vector2f position, sf::Time time, sf::RenderWindow &window)
+{
+  initText(text, font, 100, sf::Color::White, sf::Color::Black, 2, position);
+  sf::Clock clock;
+  while (clock.getElapsedTime() < time)
+  {
+    window.clear();
+    window.draw(text);
+    window.display();
   }
 }

@@ -10,7 +10,7 @@ public:
   std::string name, texturePath, currentAction, testTexturePathR;
   int hp, baseSpeed, baseAttack, accuracy, stamina, defence, speed, attack, player, startPlace;
   sf::Vector2f currentPosition;
-  bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen, animating, doingAction;
+  bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen, animating, doingAction, hasWon;
   sf::Sprite sprite;
   sf::Texture texture;
   sf::Rect<int> defaultRectR, defaultRectL, lightAttackRectR, lightAttackRectL, heavyAttackRectR, heavyAttackRectL, guardRectR, guardRectL;
@@ -19,7 +19,7 @@ public:
                      sf::Rect<int> newDefaultRectR, sf::Rect<int> newDefaultRectL, sf::Rect<int> newLightAttackRectR, sf::Rect<int> newLightAttackRectL,
                      sf::Rect<int> newHeavyAttackRectR, sf::Rect<int> newHeavyAttackRectL, sf::Rect<int> newGuardRectR, sf::Rect<int> newGuardRectL,
                      bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false,
-                     std::string initCurrentAction = "", int newAttack = 0, int newSpeed = 0)
+                     std::string initCurrentAction = "", int newAttack = 0, int newSpeed = 0, bool initHasWon = false)
   {
     name = newName;
     hp = newHp;
@@ -45,6 +45,7 @@ public:
     isBot = initBot;
     actionChosen = initActionChosen;
     currentAction = initCurrentAction;
+    hasWon = initHasWon;
   }
 
   std::string displayStats()
