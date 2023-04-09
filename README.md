@@ -7,7 +7,7 @@ g++ -L C:\Users\edwar\Documents\codeProjects\C++\SFML-2.5.1\lib .\main.o -o game
 
 # Battle Game
 First sfml project. Pretty janky but hey.
-
+Thankyou to my fiance for doing the drawings.
 ## Compilation Instructions
 For windows using MinGW. Download sfml and the matching compiler version
 from the [website](https://www.sfml-dev.org/download/sfml/2.5.1/). The versions MUST
