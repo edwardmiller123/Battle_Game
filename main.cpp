@@ -54,6 +54,20 @@ int main()
 
   initText(text, font, 50, sf::Color::Magenta, sf::Color::Black, 4, sf::Vector2f(350.f, 200.f));
 
+  characters = initCharacters();
+  for (int i = 0; i < characters.size(); i++)
+  {
+    if (!characters[i].texture.loadFromFile(characters[i].texturePath))
+    {
+      std::cout << "a character icon texture didnt load";
+      return 0;
+    };
+    characters[i].sprite.setTexture(characters[i].texture);
+    characters[i].sprite.setTextureRect(characters[i].defaultRectR);
+    characters[i].sprite.scale(sf::Vector2f(0.25, 0.25));
+    characters[i].sprite.setPosition(sf::Vector2f(i * 250 + 300.f, 475.f));
+  }
+
   // Start Game loop.
   while (window.isOpen())
   {
@@ -61,21 +75,12 @@ int main()
     while (menu)
     {
 
-      // Draw character icons on the menu.
       window.clear();
       window.draw(background);
-      characters = initCharacters();
+      
+      // Draw character icons on the menu.
       for (int i = 0; i < characters.size(); i++)
       {
-        if (!characters[i].texture.loadFromFile(characters[i].texturePath))
-        {
-          std::cout << "a character icon texture didnt load";
-          return 0;
-        };
-        characters[i].sprite.setTexture(characters[i].texture);
-        characters[i].sprite.setTextureRect(characters[i].defaultRectR);
-        characters[i].sprite.scale(sf::Vector2f(0.25, 0.25));
-        characters[i].sprite.setPosition(sf::Vector2f(i * 250 + 300.f, 475.f));
         window.draw(characters[i].sprite);
       }
 
@@ -147,7 +152,7 @@ int main()
 
     // Menu closes. Character choices are prepared for the game.
     initCombatants(players, characters, combatants);
-   
+
     std::string infoTextString;
 
     initText(infoText, font, 30, sf::Color::Magenta, sf::Color::Black, 4, sf::Vector2f(550.f, 100.f));
@@ -240,7 +245,7 @@ int main()
           {
             if (combatants[i].isBot)
             {
-              infoTextString = combatants[i].name + " (CPU) chooses...\n";
+              infoTextString = combatants[i].name + " (CPU) is choosing...\n";
               action = bot(2);
             }
             else
@@ -323,12 +328,7 @@ int main()
 
       // Reset the action dependant stats, regain stamina
       // and clear the actionRecord ready for next turn.
-      for (int n = 0; n < 2; n++)
-      {
-        combatants[n].resetTempStats();
-        combatants[n].increaseStamina();
-        actionRecord.clear();
-      }
+      reset(combatants, actionRecord);
 
       for (int m = 0; m < 2; m++)
       {

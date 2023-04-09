@@ -107,7 +107,7 @@ void applyActions(std::vector<character> &combatants, actionTracker &tracker, st
 
 void animations(bool exitState, std::vector<actionTracker> &actionRecord, sf::Text &infoText,
                 std::vector<character> &combatants, sf::RenderWindow &window, bool &victory, bool &menu,
-                 sf::Event &event, sf::Sprite &background)
+                sf::Event &event, sf::Sprite &background)
 {
   sf::Sprite opponentSprite;
   if (!exitState)
@@ -170,5 +170,15 @@ void animations(bool exitState, std::vector<actionTracker> &actionRecord, sf::Te
         }
       }
     }
+  }
+}
+
+void reset(std::vector<character> &combatants, std::vector<actionTracker> &actionRecord)
+{
+  for (int n = 0; n < 2; n++)
+  {
+    combatants[n].resetTempStats();
+    combatants[n].increaseStamina();
+    actionRecord.clear();
   }
 }
