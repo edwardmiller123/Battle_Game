@@ -64,7 +64,7 @@ int main()
     };
     characters[i].sprite.setTexture(characters[i].texture);
     characters[i].sprite.setTextureRect(characters[i].defaultRectR);
-    characters[i].sprite.scale(sf::Vector2f(0.25, 0.25));
+    characters[i].sprite.scale(characters[i].spriteScaleFactor);
     characters[i].sprite.setPosition(sf::Vector2f(i * 250 + 300.f, 475.f));
   }
 

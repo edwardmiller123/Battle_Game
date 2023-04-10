@@ -9,17 +9,17 @@ class character
 public:
   std::string name, texturePath, currentAction, testTexturePathR;
   int hp, baseSpeed, baseAttack, accuracy, stamina, defence, speed, attack, player, startPlace;
-  sf::Vector2f currentPosition;
+  sf::Vector2f currentPosition, spriteScaleFactor;
   bool guarding, preparingToDodge, prepCounterAttack, isBot, actionChosen, animating, doingAction, hasWon;
   sf::Sprite sprite;
   sf::Texture texture;
   sf::Rect<int> defaultRectR, defaultRectL, lightAttackRectR, lightAttackRectL, heavyAttackRectR, heavyAttackRectL, guardRectR, guardRectL;
 
   void new_character(std::string newName, int newHp, int newBaseSpeed, int newBaseAttack, int newDefence, int newAccuracy, int newStamina, std::string newTexturePath,
-                     sf::Rect<int> newDefaultRectR, sf::Rect<int> newDefaultRectL, sf::Rect<int> newLightAttackRectR, sf::Rect<int> newLightAttackRectL,
-                     sf::Rect<int> newHeavyAttackRectR, sf::Rect<int> newHeavyAttackRectL, sf::Rect<int> newGuardRectR, sf::Rect<int> newGuardRectL,
-                     bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false, bool initActionChosen = false,
-                     std::string initCurrentAction = "", int newAttack = 0, int newSpeed = 0, bool initHasWon = false)
+                     sf::Vector2f newSpriteScaleFactor, sf::Rect<int> newDefaultRectR, sf::Rect<int> newDefaultRectL, sf::Rect<int> newLightAttackRectR,
+                     sf::Rect<int> newLightAttackRectL, sf::Rect<int> newHeavyAttackRectR, sf::Rect<int> newHeavyAttackRectL, sf::Rect<int> newGuardRectR,
+                     sf::Rect<int> newGuardRectL, bool initGuard = false, bool initDodge = false, bool initCounterAttack = false, bool initBot = false,
+                     bool initActionChosen = false, std::string initCurrentAction = "", int newAttack = 0, int newSpeed = 0, bool initHasWon = false)
   {
     name = newName;
     hp = newHp;
@@ -46,6 +46,7 @@ public:
     actionChosen = initActionChosen;
     currentAction = initCurrentAction;
     hasWon = initHasWon;
+    spriteScaleFactor = newSpriteScaleFactor;
   }
 
   std::string displayStats()
@@ -313,6 +314,10 @@ public:
         {
           // The heavy attack texture is too tall so here is a janky fix.
           sprite.setPosition(sf::Vector2f(currentPosition.x, 380.f));
+        }
+        else if (name == "SpeedyMcSpeed")
+        {
+          sprite.setPosition(sf::Vector2f(currentPosition.x, 450.f));
         }
         switch (startPlace)
         {
