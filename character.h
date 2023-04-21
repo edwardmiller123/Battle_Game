@@ -350,7 +350,7 @@ public:
         }
       }
     }
-    if (timeElapsed > sf::milliseconds(3000))
+    if (timeElapsed > sf::milliseconds(2500))
     {
       *animatingPtr = false;
       *doingActionPtr = false;
