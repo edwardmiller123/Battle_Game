@@ -1,5 +1,6 @@
 #include <iostream>
-#include <windows.h>
+#include <chrono>
+#include <thread>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -257,7 +258,7 @@ int main()
           if (combatants[i].isBot)
           {
             // Slows the bots choices a bit
-            Sleep(2000);
+            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
           }
 
           chooseAction(action, enoughStamina, combatants[i], infoTextString);
