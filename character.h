@@ -310,9 +310,9 @@ public:
       }
       else if (tracker.action == "Heavy Attack")
       {
+        // The heavy attack texture is too tall so here is a janky fix.
         if (name == "BigBoi")
         {
-          // The heavy attack texture is too tall so here is a janky fix.
           sprite.setPosition(sf::Vector2f(currentPosition.x, 380.f));
         }
         else if (name == "SpeedyMcSpeed")

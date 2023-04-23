@@ -109,7 +109,6 @@ void animations(bool exitState, std::vector<actionTracker> &actionRecord, sf::Te
         if (combatants[j].player == actionRecord[k].player)
         {
           combatants[j].animating = true;
-          std::cout << actionRecord[k].player << " " << actionRecord[k].action << "\n";
 
           // Locate opponent sprite
           for (int m = 0; m < 2; m++)
