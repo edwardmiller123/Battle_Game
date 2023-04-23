@@ -1,7 +1,7 @@
 # Battle Game
 First sfml project. Pretty janky but hey.
 Thankyou to my fiance for doing the drawings.
-## Compilation Instructions
+## Compilation Instructions (Windows)
 For windows using MinGW. Download sfml and the matching compiler version
 from the [website](https://www.sfml-dev.org/download/sfml/2.5.1/). The versions MUST
 match 100 percent. 
@@ -25,6 +25,22 @@ Can complile in one step:
 ```
 g++ -DSFML_STATIC -I path\to\sfml\SFML-2.5.1\include -L path\to\sfml\SFML-2.5.1\lib main.cpp -o game.exe -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lopengl32 -lwinmm -lgdi32 -lfreetype
 ```
+## Compilation Instructions (Linux)
+The simplest way is to install SFML with: 
+```
+sudo apt-get install libsfml-dev
+```
+You can then compile with:
+```
+g++ -c main.cpp
+```
+and create the application with:
+```
+g++ main.o game.exe -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+```
+
+
+
 
 
 
