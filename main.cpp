@@ -132,6 +132,12 @@ int main()
               showCharacterStats = true;
             }
           }
+          if (botSprite.getGlobalBounds().contains(mousePosition))
+          {
+            text.setPosition(sf::Vector2f(600.f, 200.f));
+            text.setString("CPU Player 2");
+            showCharacterStats = true;
+          }
           if (!showCharacterStats)
           {
             text.setString(displayString);
@@ -329,7 +335,7 @@ int main()
         }
       }
     }
-    
+
     for (int i = 0; i < 2; i++)
     {
       if (combatants[i].hasWon)
