@@ -25,42 +25,21 @@ void chooseAction(int &action, bool &enoughStamina, character &combatant, std::s
   {
   case 1:
     enoughStamina = combatant.light_attack();
-    if (enoughStamina)
-    {
-      break;
-    }
-    else
-    {
-      infoTextString = "Not enough stamina\n";
-      break;
-    }
+    break;
   case 2:
     enoughStamina = combatant.heavy_attack();
-    if (enoughStamina)
-    {
-      break;
-    }
-    else
-    {
-      infoTextString = "Not enough stamina\n";
-      break;
-    }
+    break;
   case 3:
     enoughStamina = combatant.dodge();
-    if (enoughStamina)
-    {
-      break;
-    }
-    else
-    {
-      infoTextString = "Not enough stamina\n";
-      break;
-    }
-
+    break;
   case 4:
     combatant.guard();
     break;
   default:
+    if (!enoughStamina)
+    {
+      infoTextString = "Not enough stamina\n";
+    }
     break;
   }
 
